@@ -14,10 +14,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
-class MapManager(val context: MainActivity){
+class MapManager(private val context: MainActivity){
     private lateinit var mapView: MapView
-    private val ctx = context.applicationContext
-    private val dbManager : DBManager = DBManager(ctx)
+    private val dbManager : DBManager = DBManager(context)
 
 
     // Funcion para generar el mapa (la vista)
@@ -41,7 +40,7 @@ class MapManager(val context: MainActivity){
     */
     fun generateRoute(id_route: String) : Boolean{
         // Obtenemos la ruta y retorna FALSE si no se econtro la ruta
-        var route : Ruta? = dbManager.getRoute(id_route) ?: return false
+        val route : Ruta = dbManager.getRoute(id_route) ?: return false
 
         /* Verifica si la corrutina es nula o esta completada para poder iniciar una nueva corrutina
         *  en caso de que ya se este ejecutando una corrutina retornara FALSE                        */
@@ -52,22 +51,22 @@ class MapManager(val context: MainActivity){
             mapView.invalidate()
 
             // Generacion del overlay de la ruta
-            val roadManager = OSRMRoadManager(ctx,OSRMRoadManager.MEAN_BY_CAR)
-            val road = roadManager.getRoad(route?.getRefPoints())
-            val roadOverlay = RoadManager.buildRoadOverlay(road, route!!.getColor(), 15F)
+            val roadManager = OSRMRoadManager(context ,OSRMRoadManager.MEAN_BY_CAR)
+            val road = roadManager.getRoad(route.getRefPoints())
+            val roadOverlay = RoadManager.buildRoadOverlay(road, route.getColor(), 15F)
 
             // Añado primero el overlay de la ruta
-            mapView.getOverlays().add(roadOverlay)
+            mapView.overlays.add(roadOverlay)
 
             // Generacion de iconos
             val nodeIcon = context.resources.getDrawable(R.drawable.icono_parada)
             for (i in route.getRefStops()!!.indices) {
                 val nodeMarker = Marker(mapView)
-                nodeMarker.setPosition(route.getRefStops()!!.get(i))
-                nodeMarker.setIcon(nodeIcon)
-                nodeMarker.setTitle("Step $i")
+                nodeMarker.position = route.getRefStops()!![i]
+                nodeMarker.icon = nodeIcon
+                nodeMarker.title = "Step $i"
                 //Se añade cada icono
-                mapView.getOverlays().add(nodeMarker)
+                mapView.overlays.add(nodeMarker)
             }
 
             // Refrescamos el mapa
