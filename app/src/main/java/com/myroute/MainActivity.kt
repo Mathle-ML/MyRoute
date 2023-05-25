@@ -1,7 +1,9 @@
 package com.myroute
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.myroute.dbmanager.DBManager
 import com.myroute.mapmanager.MapManager
@@ -38,5 +40,15 @@ open class MainActivity : AppCompatActivity() {
             var ruta = routes.get(i)
             mapManager.generateRoute(ruta.getIDRoute()!!)
         }
+
+        val btnCamiones: ImageButton = findViewById(R.id.btnCamiones)
+        btnCamiones.setOnClickListener{
+            startActivity(Intent(this, Camiones::class.java))
+        }
+        val btnTrenes: ImageButton = findViewById(R.id.btnTrenes)
+        btnTrenes.setOnClickListener{
+            startActivity(Intent(this, Trenes::class.java))
+        }
+
     }
 }
