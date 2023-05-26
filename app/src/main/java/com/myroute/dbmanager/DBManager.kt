@@ -1,14 +1,14 @@
 package com.myroute.dbmanager
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.myroute.MainActivity
 import com.myroute.models.Colonia
 import com.myroute.models.Ruta
 import org.osmdroid.util.GeoPoint
 
-class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     //Informacion de la base de datos
     companion object {
         private const val DATABASE_VERSION = 1
@@ -45,8 +45,6 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
 
     @SuppressLint("Range")
     fun getRoute(idRoute: String): Ruta? {
-        if (!context.dbupdate.isCFUCompleted)return null
-
         val db = this.readableDatabase
 
         val cursor = db.rawQuery("SELECT $COLUMN_REF_POINTS, $COLUMN_REF_STOPS, $COLUMN_COLOR FROM $TABLE_NAME_RUTAS WHERE $COLUMN_ID_ROUTE=?", arrayOf(idRoute))
@@ -88,9 +86,7 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
     }
 
     @SuppressLint("Range")
-    fun getAllRoutes(): ArrayList<Ruta>? {
-        if (!context.dbupdate.isCFUCompleted)return null
-
+    fun getAllRoutes(): ArrayList<Ruta> {
         val routes = ArrayList<Ruta>()
         val db = this.readableDatabase
 
@@ -114,8 +110,6 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
 
     @SuppressLint("Range")
     fun getColonia(idColn: String): Colonia? {
-        if (!context.dbupdate.isCFUCompleted)return null
-
         val db = this.readableDatabase
 
         val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME_COLONIAS WHERE $COLUMN_ID_COLN=?", arrayOf(idColn))

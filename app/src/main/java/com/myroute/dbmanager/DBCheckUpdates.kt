@@ -2,6 +2,7 @@ package com.myroute.dbmanager
 
 import android.util.Log
 import com.myroute.MainActivity
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -17,9 +18,10 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
+@OptIn(DelicateCoroutinesApi::class)
 class DBCheckUpdates(val context: MainActivity) {
     // Variable para verificar si el proceso (corrutina) de verificacion de actualizaciones a finalizado
-    var isCFUCompleted: Boolean = false
+    private var isCFUCompleted: Boolean = false
 
     // Variable para verificar si la base de datos ha sido o esta actualizada
     var isUpdated: Boolean = false
@@ -61,7 +63,9 @@ class DBCheckUpdates(val context: MainActivity) {
             while (!isUpdated){
                 delay(1000L)
                 timeout+=1
-                Log.i("MyRoute:DBManager/Update", "Esperando al proceso de actaulizacion, tiempo transcurrido: " + timeout + " segundos")
+                Log.i("MyRoute:DBManager/Update",
+                    "Esperando al proceso de actaulizacion, tiempo transcurrido: $timeout segundos"
+                )
                 if(timeout >= 90){
                     Log.e("MyRoute:DBManager/Update", "El tiempo de espera sobrepaso los 90 segundos")
                     break
