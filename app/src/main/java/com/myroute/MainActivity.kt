@@ -1,21 +1,31 @@
 package com.myroute
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.widget.ImageButton
+import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.myroute.dbmanager.DBCheckUpdates
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import com.caverock.androidsvg.BuildConfig
 import com.myroute.dbmanager.DBManager
 import com.myroute.mapmanager.MapManager
 import kotlinx.coroutines.Deferred
+import java.io.File
+
 
 class MainActivity : AppCompatActivity() {
     // la instancia que maneja la corrutina, esta debe estar inicializada aqui
-    //var coroutineManager: Deferred<Unit>? = null
+    var coroutineManager: Deferred<Unit>? = null
     // variables de acceso a las propiedades del actualizador de la base de datos y majeo de mapa
     //lateinit var dbupdate: DBCheckUpdates
     //lateinit var mapManager: MapManager
 
+    @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         // Metodo que instancia la clase
         super.onCreate(savedInstanceState)
@@ -24,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         //dbupdate = DBCheckUpdates(this)
         //mapManager = MapManager(this)
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.othermain)
 
         /*
         # Cualquiera de las dos clases que hice deben estar instanciadas despues de onCreate,
@@ -353,6 +363,161 @@ class MainActivity : AppCompatActivity() {
             doubleArrayOf(20.56328871953522, -103.31781542422353),
             doubleArrayOf(20.561337786797242, -103.30787415301018)
         )
+        val c47_kilometro13_kilometro13_refStops = arrayListOf(
+            doubleArrayOf(20.66935591504175, -103.3462310817853),
+            doubleArrayOf(20.66786326176203, -103.34609128366814),
+            doubleArrayOf(20.66326346445079, -103.34583748144847),
+            doubleArrayOf(20.65819894656298, -103.34566072416274),
+            doubleArrayOf(20.65519975882808, -103.34493843610583),
+            doubleArrayOf(20.65335806776933, -103.3437115330221),
+            doubleArrayOf(20.648857950337998, -103.34085228595879),
+            doubleArrayOf(20.646342968584896, -103.33923281329334),
+            doubleArrayOf(20.641385560211393, -103.33593010676734),
+            doubleArrayOf(20.636023218770678, -103.33132337987261),
+            doubleArrayOf(20.633655453889034, -103.3292195373473),
+            doubleArrayOf(20.631045201704715, -103.32689246337384),
+            doubleArrayOf(20.628081710396927, -103.32489481524675),
+            doubleArrayOf(20.627113570777947, -103.32173475732189),
+            doubleArrayOf(20.621072928184102, -103.32167697963365),
+            doubleArrayOf(20.6080671682928, -103.32820904600734),
+            doubleArrayOf(20.597313782759134, -103.32482327100895),
+            doubleArrayOf(20.595002926579355, -103.3262933148758),
+            doubleArrayOf(20.594875710640597, -103.32901547361111),
+            doubleArrayOf(20.594770116490803, -103.33120501717914),
+            doubleArrayOf(20.59468244628328, -103.33357688292938),
+            doubleArrayOf(20.59383093247588, -103.33376790919034),
+            doubleArrayOf(20.59190464380783, -103.333458555938),
+            doubleArrayOf(20.589501422924826, -103.33310185212096),
+            doubleArrayOf(20.58509419999816, -103.33240122909355),
+            doubleArrayOf(20.584143012635444, -103.33226714952667),
+            doubleArrayOf(20.582395988077813, -103.33197262121719),
+            doubleArrayOf(20.581332937634908, -103.33179026483066),
+            doubleArrayOf(20.58010870919258, -103.33161810932685),
+            doubleArrayOf(20.5782669877197, -103.33165841402817),
+            doubleArrayOf(20.57752910651404, -103.3318669422327),
+            doubleArrayOf(20.57625284310249, -103.32938294032259),
+            doubleArrayOf(20.575752399360105, -103.32814894949045),
+            doubleArrayOf(20.575189340697694, -103.32684077019398),
+            doubleArrayOf(20.574794331004707, -103.32584813410038),
+            doubleArrayOf(20.569620959164926, -103.32738517237364),
+            doubleArrayOf(20.567068479052068, -103.32713841575159),
+            doubleArrayOf(20.56328871953522, -103.31781542422353),
+            doubleArrayOf(20.561337786797242, -103.30787415301018)
+        )
+        var dbmanager = DBManager(this)
+        dbmanager.addRoute("C47-Panteon | Dos templos", c47_panteon_dosTemplos_refPoints, c47_panteon_dosTemplos_refStops, "green")
+        dbmanager.addRoute("C47-Kilometro 13 | Dos templos", c47_kilometro13_dosTemplos_refPoints, c47_kilometro13_dosTemplos_refStops, "green")
+        dbmanager.addRoute("C47-Panteon | Kilometro 13", c47_panteon_kilometro13_refPoints, c47_panteon_kilometro13_refStops, "green")
+        dbmanager.addRoute("C47_Kilometro 13 | Kilometro 13", c47_kilometro13_kilometro13_refPoints, c47_kilometro13_kilometro13_refStops, "green")
 
+        checkPermissionsAndCopyDatabase()
+
+        val shareButton: Button = findViewById(R.id.buton)
+        shareButton.setOnClickListener {
+            val filePath = filesDir.absolutePath + "/basededatos/db.sqlite3"
+            shareFile(filePath)
+        }
+
+    }
+    private val PERMISSION_REQUEST_CODE = 123
+    private fun checkAndRequestPermissions() {
+        val permissions = arrayOf(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+
+        val permissionsToRequest = ArrayList<String>()
+
+        for (permission in permissions) {
+            val result = ContextCompat.checkSelfPermission(this, permission)
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission)
+            }
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    permissionsToRequest.toTypedArray(),
+                    PERMISSION_REQUEST_CODE
+                )
+            }
+        } else {
+            // Todos los permisos requeridos ya han sido otorgados
+            copyDatabaseToDocumentsDirectory()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                    // Se otorgaron todos los permisos solicitados
+                    copyDatabaseToDocumentsDirectory()
+                } else {
+                    // Al menos un permiso no fue otorgado
+                    // Aquí puedes manejar el caso en que el usuario deniegue los permisos
+                }
+            }
+        }
+    }
+
+    // Llama a esta función para verificar y solicitar los permisos en tiempo real
+    private fun checkPermissionsAndCopyDatabase() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val result = ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            if (result == PackageManager.PERMISSION_GRANTED) {
+                // Permiso ya otorgado
+                copyDatabaseToDocumentsDirectory()
+            } else {
+                // Solicitar permisos en tiempo real
+                checkAndRequestPermissions()
+            }
+        } else {
+            // Versión de Android anterior a 6.0, no se requieren permisos en tiempo real
+            copyDatabaseToDocumentsDirectory()
+        }
+    }
+
+    fun copyDatabaseToDocumentsDirectory(){
+        var dbManager = DBManager(this)
+        if(dbManager.copyDatabaseToDocumentsDirectory()){
+            Log.i("MyRoute:Info", "El path es")
+        }else{
+            Log.e("MyRoute:Error", "error falso")
+        }
+    }
+
+    private fun shareFile(filePath: String) {
+        val file = File(filePath)
+        if (!file.exists()) {
+            // El archivo no existe, mostrar un mensaje de error o realizar alguna acción adecuada
+            return
+        }
+
+        // Crear el intent para compartir el archivo
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "*/*" // Define el tipo de archivo a compartir
+
+        // Uri del archivo a compartir
+        val fileUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", file)
+
+        // Asignar el archivo URI al intent
+        shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
+
+        // Agregar flags para otorgar permisos de lectura a las aplicaciones receptoras
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        // Iniciar la actividad para compartir
+        startActivity(Intent.createChooser(shareIntent, "Compartir archivo"))
     }
 }

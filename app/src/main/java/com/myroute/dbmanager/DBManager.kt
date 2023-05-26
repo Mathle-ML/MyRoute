@@ -5,10 +5,16 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.os.Environment
+import android.util.Log
 import com.myroute.MainActivity
 import com.myroute.models.Colonia
 import com.myroute.models.Ruta
 import org.osmdroid.util.GeoPoint
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 
 class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     //Informacion de la base de datos
@@ -181,4 +187,47 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
         return Colonia(idColn, refRoutsArray, colnColinArray, colnRadio)
     }
     //----------------------------------------------------------//
+    fun copyDatabaseToDocumentsDirectory(): Boolean {
+        val databasePath = context.getDatabasePath(DATABASE_NAME).absolutePath
+
+        val filesDir = context.filesDir
+        val databaseDir = File(filesDir, "basededatos")
+        val destinationDirectoryPath: String = databaseDir.absolutePath
+
+        if (!databaseDir.exists()) {
+            // Si el directorio de base de datos no existe, crea el directorio
+            if (!databaseDir.mkdirs()) {
+                // No se pudo crear el directorio de base de datos
+                return false
+            }
+        }
+
+        val destinationFilePath = File(databaseDir, "db.sqlite3")
+
+        return try {
+            val sourceFile = File(databasePath)
+            if (!sourceFile.exists() || !sourceFile.isFile) {
+                // La base de datos de origen no existe o no es un archivo válido
+                return false
+            }
+
+            val inputStream = FileInputStream(sourceFile)
+            val outputStream = FileOutputStream(destinationFilePath)
+
+            val buffer = ByteArray(1024)
+            var length: Int
+            while (inputStream.read(buffer).also { length = it } > 0) {
+                outputStream.write(buffer, 0, length)
+            }
+
+            outputStream.flush()
+            outputStream.close()
+            inputStream.close()
+
+            true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
+        }
+    }
 }
