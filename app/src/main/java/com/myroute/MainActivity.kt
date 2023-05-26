@@ -1,11 +1,10 @@
 package com.myroute
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.myroute.dbmanager.DBCheckUpdates
-import com.myroute.dbmanager.DBManager
 import com.myroute.mapmanager.MapManager
 import kotlinx.coroutines.Deferred
 
@@ -20,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         // Metodo que instancia la clase
         super.onCreate(savedInstanceState)
 
+        getSupportActionBar()?.hide()
         //Inicializacion de variables (Las clases que yo hice)
         dbupdate = DBCheckUpdates(this)
         mapManager = MapManager(this)
@@ -50,13 +50,45 @@ class MainActivity : AppCompatActivity() {
         }
         * */
 
+        var IsFragmentMap = true
+        var IsFragmentCamiones = false
+        var IsFragmentTrenes = false
+
         val btnCamiones: ImageButton = findViewById(R.id.btnCamiones)
-        btnCamiones.setOnClickListener{
-            startActivity(Intent(this, Camiones::class.java))
-        }
         val btnTrenes: ImageButton = findViewById(R.id.btnTrenes)
+        val btnMap: ImageButton = findViewById(R.id.btnMap)
+        btnMap.setOnClickListener{
+            if(IsFragmentCamiones){
+                findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
+                IsFragmentMap = true
+                IsFragmentCamiones = false
+            }else if(IsFragmentTrenes){
+                findNavController(R.id.mainConainer).navigate(R.id.action_fragmentTrenes_to_fragmentMap)
+                IsFragmentMap = true
+                IsFragmentTrenes = false
+            }
+        }
+        btnCamiones.setOnClickListener{
+            if(IsFragmentMap){
+                findNavController(R.id.mainConainer).navigate(R.id.action_fragmentMap_to_fragmentCamiones)
+                IsFragmentCamiones = true
+                IsFragmentMap = false
+            }else if(IsFragmentTrenes){
+                findNavController(R.id.mainConainer).navigate(R.id.action_fragmentTrenes_to_fragmentCamiones)
+                IsFragmentCamiones = true
+                IsFragmentTrenes = false
+            }
+        }
         btnTrenes.setOnClickListener{
-            startActivity(Intent(this, Trenes::class.java))
+            if(IsFragmentMap){
+                findNavController(R.id.mainConainer).navigate(R.id.action_fragmentMap_to_fragmentTrenes)
+                IsFragmentTrenes = true
+                IsFragmentMap = false
+            }else if(IsFragmentCamiones){
+                findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentTrenes)
+                IsFragmentTrenes = true
+                IsFragmentCamiones = false
+            }
         }
 
     }
