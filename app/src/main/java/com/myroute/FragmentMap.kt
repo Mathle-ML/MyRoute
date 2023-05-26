@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.findFragment
 
 class FragmentMap : Fragment() {
     private var param1: String? = null
@@ -38,4 +39,5 @@ class FragmentMap : Fragment() {
                 }
             }
     }
+
 }

@@ -1,9 +1,13 @@
 package com.myroute
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageButton
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.myroute.dbmanager.DBCheckUpdates
 import com.myroute.mapmanager.MapManager
 import kotlinx.coroutines.Deferred
@@ -15,11 +19,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var dbupdate: DBCheckUpdates
     lateinit var mapManager: MapManager
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         // Metodo que instancia la clase
         super.onCreate(savedInstanceState)
 
-        getSupportActionBar()?.hide()
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
         //Inicializacion de variables (Las clases que yo hice)
         dbupdate = DBCheckUpdates(this)
         mapManager = MapManager(this)
@@ -50,45 +57,55 @@ class MainActivity : AppCompatActivity() {
         }
         * */
 
-        var IsFragmentMap = true
-        var IsFragmentCamiones = false
-        var IsFragmentTrenes = false
+        var isFragmentMap = true
+        var isFragmentCamiones = false
+        var isFragmentTrenes = false
 
         val btnCamiones: ImageButton = findViewById(R.id.btnCamiones)
         val btnTrenes: ImageButton = findViewById(R.id.btnTrenes)
         val btnMap: ImageButton = findViewById(R.id.btnMap)
+        btnMap.setSelected(true)
         btnMap.setOnClickListener{
-            if(IsFragmentCamiones){
+            if(isFragmentCamiones){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-                IsFragmentMap = true
-                IsFragmentCamiones = false
-            }else if(IsFragmentTrenes){
+                isFragmentMap = true
+                isFragmentCamiones = false
+                btnCamiones.setSelected(false)
+            }else if(isFragmentTrenes){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentTrenes_to_fragmentMap)
-                IsFragmentMap = true
-                IsFragmentTrenes = false
+                isFragmentMap = true
+                isFragmentTrenes = false
+                btnTrenes.setSelected(false)
             }
+            btnMap.setSelected(true)
         }
         btnCamiones.setOnClickListener{
-            if(IsFragmentMap){
+            if(isFragmentMap){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentMap_to_fragmentCamiones)
-                IsFragmentCamiones = true
-                IsFragmentMap = false
-            }else if(IsFragmentTrenes){
+                isFragmentCamiones = true
+                isFragmentMap = false
+                btnMap.setSelected(false)
+            }else if(isFragmentTrenes){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentTrenes_to_fragmentCamiones)
-                IsFragmentCamiones = true
-                IsFragmentTrenes = false
+                isFragmentCamiones = true
+                isFragmentTrenes = false
+                btnTrenes.setSelected(false)
             }
+            btnCamiones.setSelected(true)
         }
         btnTrenes.setOnClickListener{
-            if(IsFragmentMap){
+            if(isFragmentMap){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentMap_to_fragmentTrenes)
-                IsFragmentTrenes = true
-                IsFragmentMap = false
-            }else if(IsFragmentCamiones){
+                isFragmentTrenes = true
+                isFragmentMap = false
+                btnMap.setSelected(false)
+            }else if(isFragmentCamiones){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentTrenes)
-                IsFragmentTrenes = true
-                IsFragmentCamiones = false
+                isFragmentTrenes = true
+                isFragmentCamiones = false
+                btnCamiones.setSelected(false)
             }
+            btnTrenes.setSelected(true)
         }
 
     }

@@ -8,63 +8,68 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/menu_hamburguesa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/menu_hamburguesa" />
+
+            <TextView
+                android:id="@+id/tv_title_toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="@string/app_name"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/menu_share_toolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="19dp"
+                    android:src="@android:drawable/ic_menu_share" />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mainConainer"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph" >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:navGraph="@navigation/nav_graph">
 
     </androidx.fragment.app.FragmentContainerView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="412dp"
-        android:layout_height="145dp"
-        app:cardBackgroundColor="@color/sky_blue"
-        app:cardCornerRadius="50dp"
-        app:cardElevation="25dp"
-        app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <LinearLayout
-            style="?android:attr/buttonBarStyle"
-            android:layout_width="336dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingStart="10dp"
-                android:src="@drawable/icons8_b_squeda_50" />
-
-            <EditText
-                android:id="@+id/editTextText2"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="text"
-                android:text="Buscar rutas" />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="411dp"
+        android:layout_height="153dp"
+        android:background="@drawable/nav_bar_style"
         app:cardBackgroundColor="@color/sky_blue"
         app:cardCornerRadius="50dp"
         app:cardElevation="25dp"
@@ -81,16 +86,17 @@
             style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="52dp"
+            android:background="@drawable/nav_bar_style"
             android:gravity="center"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/btnTrenes"
-                android:background="@drawable/btn_style"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/btn__nav_bar_style"
                 android:contentDescription="ola"
                 android:elevation="25dp"
                 android:scaleType="fitCenter"
@@ -98,22 +104,22 @@
 
             <ImageButton
                 android:id="@+id/btnMap"
-                android:background="@drawable/btn_style"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/btn__nav_bar_style"
                 android:elevation="25dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/map" />
 
             <ImageButton
                 android:id="@+id/btnCamiones"
-                android:background="@drawable/btn_style"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/btn__nav_bar_style"
                 android:contentDescription="ola"
                 android:elevation="25dp"
                 android:scaleType="fitCenter"
