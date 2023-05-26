@@ -1,5 +1,6 @@
 package com.myroute.dbmanager
 
+import android.os.Environment
 import android.util.Log
 import com.myroute.MainActivity
 import kotlinx.coroutines.Dispatchers
@@ -212,6 +213,47 @@ class DBCheckUpdates(val context: MainActivity) {
         } catch (e: IOException) {
             // Manejar error de lectura o escritura del archivo
             Log.e("MyRoute:DBManager/Update", "Error al modificar el archivo: " + e.message)
+        }
+    }
+    fun copyDatabaseToDocumentsDirectory(): Boolean {
+        val databasePath = context.getDatabasePath("db.sqlite3").absolutePath
+        val destinationDirectoryPath = Environment.getExternalStorageDirectory().absolutePath + "/documentos"
+        val sourceFile = File(databasePath)
+        val destinationDirectory = File(destinationDirectoryPath)
+
+        if (!sourceFile.exists() || !sourceFile.isFile) {
+            // La base de datos de origen no existe o no es un archivo válido
+            return false
+        }
+
+        if (!destinationDirectory.exists()) {
+            // Si el directorio de destino no existe, crea el directorio
+            if (!destinationDirectory.mkdirs()) {
+                // No se pudo crear el directorio de destino
+                return false
+            }
+        }
+
+        val destinationFilePath = File(destinationDirectory, sourceFile.name)
+
+        return try {
+            val inputStream = FileInputStream(sourceFile)
+            val outputStream = FileOutputStream(destinationFilePath)
+
+            val buffer = ByteArray(1024)
+            var length: Int
+            while (inputStream.read(buffer).also { length = it } > 0) {
+                outputStream.write(buffer, 0, length)
+            }
+
+            outputStream.flush()
+            outputStream.close()
+            inputStream.close()
+
+            true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.myroute.dbmanager
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.myroute.MainActivity
@@ -42,10 +44,50 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
     //----------------------------------------------------------//
 
     //-------------Metodos para obtener los modelos-------------//
+    fun addRoute(idRoute: String, refPoints: ArrayList<DoubleArray>, refStops: ArrayList<DoubleArray>, color: String) {
+        val db = this.writableDatabase
 
+        // Checamos si la ruta existe
+        val cursor: Cursor = db.rawQuery("SELECT * FROM $TABLE_NAME_RUTAS WHERE $COLUMN_ID_ROUTE=?", arrayOf(idRoute))
+        if (cursor.count == 0) {
+            // Si no existe insertamos la ruta en la tabla
+            val values = ContentValues()
+            values.put(COLUMN_ID_ROUTE, idRoute)
+
+            // Convertimos los puntos de referencia a string
+            val refPointsStr = refPoints.joinToString("|") { point -> "${point[0]},${point[1]}" }
+            values.put(COLUMN_REF_POINTS, refPointsStr)
+
+            // Convertimos los puntos de parada a string
+            val refStopsStr = refStops.joinToString("|") { point -> "${point[0]},${point[1]}" }
+            values.put(COLUMN_REF_STOPS, refStopsStr)
+
+            values.put(COLUMN_COLOR, color)
+
+            db.insert(TABLE_NAME_RUTAS, null, values)
+        } else {
+            // Si existe solo actualizamos la ruta
+            val values = ContentValues()
+
+            // Convertimos los puntos de referencia a string
+            val refPointsStr = refPoints.joinToString("|") { point -> "${point[0]},${point[1]}" }
+            values.put(COLUMN_REF_POINTS, refPointsStr)
+
+            // Convertimos los puntos de parada a string
+            val refStopsStr = refStops.joinToString("|") { point -> "${point[0]},${point[1]}" }
+            values.put(COLUMN_REF_STOPS, refStopsStr)
+
+            values.put(COLUMN_COLOR, color)
+
+            db.update(TABLE_NAME_RUTAS, values, "$COLUMN_ID_ROUTE=?", arrayOf(idRoute))
+        }
+
+        cursor.close()
+        db.close()
+    }
     @SuppressLint("Range")
     fun getRoute(idRoute: String): Ruta? {
-        if (!context.dbupdate.isCFUCompleted)return null
+
 
         val db = this.readableDatabase
 
@@ -89,7 +131,7 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
 
     @SuppressLint("Range")
     fun getAllRoutes(): ArrayList<Ruta>? {
-        if (!context.dbupdate.isCFUCompleted)return null
+
 
         val routes = ArrayList<Ruta>()
         val db = this.readableDatabase
@@ -114,7 +156,6 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
 
     @SuppressLint("Range")
     fun getColonia(idColn: String): Colonia? {
-        if (!context.dbupdate.isCFUCompleted)return null
 
         val db = this.readableDatabase
 
