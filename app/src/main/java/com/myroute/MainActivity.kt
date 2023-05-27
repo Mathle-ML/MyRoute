@@ -6,6 +6,7 @@ import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.myroute.fragments.FragmentMap
 import kotlinx.coroutines.Deferred
 
@@ -19,6 +20,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         FragmentMap.maincontext = this
         supportActionBar?.hide()
+
+        setSupportActionBar(findViewById(R.id.toolbar))
+
         verifyResult = VerifyApp(this)
     }
 
