@@ -1,10 +1,10 @@
 package com.myroute
 
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import com.myroute.dbmanager.DBCheckUpdates
-import com.myroute.mapmanager.MapManager
+import com.myroute.fragments.FragmentMap
 import kotlinx.coroutines.Deferred
 
 class MainActivity : AppCompatActivity() {
@@ -14,59 +14,56 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
         verifyResult = VerifyApp(this)
     }
 
     fun startApp(){
-        getSupportActionBar()?.hide()
-        val mapManager = MapManager(this)
-        mapManager.generateMap()
-        mapManager.generateRoute("C47_Kilometro 13 | Kilometro 13")
-        
-        var IsFragmentMap = true
-        var IsFragmentCamiones = false
-        var IsFragmentTrenes = false
+        FragmentMap.generateRoute(this,"C47_Kilometro 13 | Kilometro 13")
+        var isFragmentMap = true
+        var isFragmentCamiones = false
+        var isFragmentTrenes = false
 
         val btnCamiones: ImageButton = findViewById(R.id.btnCamiones)
         val btnTrenes: ImageButton = findViewById(R.id.btnTrenes)
         val btnMap: ImageButton = findViewById(R.id.btnMap)
         btnMap.setOnClickListener{
-            if(IsFragmentCamiones){
+            if(isFragmentCamiones){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-                IsFragmentMap = true
-                IsFragmentCamiones = false
-            }else if(IsFragmentTrenes){
+                isFragmentMap = true
+                isFragmentCamiones = false
+            }else if(isFragmentTrenes){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentTrenes_to_fragmentMap)
-                IsFragmentMap = true
-                IsFragmentTrenes = false
+                isFragmentMap = true
+                isFragmentTrenes = false
             }
         }
         btnCamiones.setOnClickListener{
-            if(IsFragmentMap){
+            if(isFragmentMap){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentMap_to_fragmentCamiones)
-                IsFragmentCamiones = true
-                IsFragmentMap = false
-            }else if(IsFragmentTrenes){
+                isFragmentCamiones = true
+                isFragmentMap = false
+            }else if(isFragmentTrenes){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentTrenes_to_fragmentCamiones)
-                IsFragmentCamiones = true
-                IsFragmentTrenes = false
+                isFragmentCamiones = true
+                isFragmentTrenes = false
             }
         }
         btnTrenes.setOnClickListener{
-            if(IsFragmentMap){
+            if(isFragmentMap){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentMap_to_fragmentTrenes)
-                IsFragmentTrenes = true
-                IsFragmentMap = false
-            }else if(IsFragmentCamiones){
+                isFragmentTrenes = true
+                isFragmentMap = false
+            }else if(isFragmentCamiones){
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentTrenes)
-                IsFragmentTrenes = true
-                IsFragmentCamiones = false
+                isFragmentTrenes = true
+                isFragmentCamiones = false
             }
         }
     }
 
     fun verificationFailed(errors: List<VerificationError>){
-
+        //Mostrar view de error
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

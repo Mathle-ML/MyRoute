@@ -1,10 +1,12 @@
-package com.myroute
+package com.myroute.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.myroute.R
 
 class FragmentCamiones : Fragment() {
     private var param1: String? = null
@@ -12,6 +14,7 @@ class FragmentCamiones : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i("MyRoute:Info", "Info puntp xD")
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)

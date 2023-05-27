@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragmentMap"
-        android:name="com.myroute.FragmentMap"
+        android:name="com.myroute.fragments.FragmentMap"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentCamiones"
-        android:name="com.myroute.FragmentCamiones"
+        android:name="com.myroute.fragments.FragmentCamiones"
         android:label="FragmentCamiones" >
         <action
             android:id="@+id/action_fragmentCamiones_to_fragmentMap"
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentTrenes"
-        android:name="com.myroute.FragmentTrenes"
+        android:name="com.myroute.fragments.FragmentTrenes"
         android:label="FragmentTrenes" >
         <action
             android:id="@+id/action_fragmentTrenes_to_fragmentMap"

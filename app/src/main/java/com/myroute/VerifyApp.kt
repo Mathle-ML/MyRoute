@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.myroute.dbmanager.DBCheckUpdates
+import org.osmdroid.config.Configuration
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -26,6 +27,11 @@ class VerifyApp(private val context: MainActivity) {
 
     private fun verify() {
         getPermissions()
+        configureOSMDroid()
+    }
+
+    private fun configureOSMDroid(){
+        Configuration.getInstance().load(context, context.getSharedPreferences("osmdroid", 0))
     }
 
     private fun checkVerificationComplete() {
@@ -104,9 +110,7 @@ class VerifyApp(private val context: MainActivity) {
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.i("MyRoute:Info", "Permisos concedidos")
-                dbupdate = DBCheckUpdates(context)
-                this.waitForUpdates()
-                context.startApp()
+                checkDBUpdate()
             } else {
                 handleVerificationFailure(VerificationError.PERMISSION_DENIED)
             }
