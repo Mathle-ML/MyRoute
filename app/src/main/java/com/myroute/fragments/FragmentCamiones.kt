@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.myroute.R
+import androidx.fragment.app.findFragment
 
 class FragmentCamiones : Fragment() {
     private var param1: String? = null
@@ -41,4 +42,5 @@ class FragmentCamiones : Fragment() {
                 }
             }
     }
+
 }
