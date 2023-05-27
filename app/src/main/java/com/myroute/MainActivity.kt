@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.myroute.fragments.FragmentMap
 import com.google.android.material.appbar.MaterialToolbar
-import com.myroute.dbmanager.DBCheckUpdates
-import com.myroute.mapmanager.MapManager
+import com.myroute.fragments.FragmentMap
 import kotlinx.coroutines.Deferred
 
 class MainActivity : AppCompatActivity() {
@@ -21,9 +18,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.hide()
+
+        setSupportActionBar(findViewById(R.id.toolbar))
+
         verifyResult = VerifyApp(this)
     }
 
