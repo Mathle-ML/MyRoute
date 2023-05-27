@@ -5,12 +5,8 @@ import android.os.Bundle
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.myroute.fragments.FragmentMap
-import com.google.android.material.appbar.MaterialToolbar
-import com.myroute.dbmanager.DBCheckUpdates
-import com.myroute.mapmanager.MapManager
 import kotlinx.coroutines.Deferred
 
 class MainActivity : AppCompatActivity() {
@@ -21,14 +17,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        FragmentMap.maincontext = this
         supportActionBar?.hide()
         verifyResult = VerifyApp(this)
     }
 
     fun startApp(){
-        FragmentMap.generateRoute(this,"C47_Kilometro 13 | Kilometro 13")
         var isFragmentMap = true
         var isFragmentCamiones = false
         var isFragmentTrenes = false
@@ -38,18 +32,22 @@ class MainActivity : AppCompatActivity() {
         val btnMap: ImageButton = findViewById(R.id.btnMap)
         btnMap.setSelected(true)
         btnMap.setOnClickListener{
+
             if(isFragmentCamiones){
+                FragmentMap.id_route = "C47_Kilometro 13 | Kilometro 13"
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
                 isFragmentMap = true
                 isFragmentCamiones = false
                 btnCamiones.setSelected(false)
             }else if(isFragmentTrenes){
+                FragmentMap.id_route = "C47-Panteon | Dos templos"
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentTrenes_to_fragmentMap)
                 isFragmentMap = true
                 isFragmentTrenes = false
                 btnTrenes.setSelected(false)
             }
             btnMap.setSelected(true)
+
         }
         btnCamiones.setOnClickListener{
             if(isFragmentMap){

@@ -9,7 +9,7 @@
         android:id="@+id/fragmentMap"
         android:name="com.myroute.fragments.FragmentMap"
         android:label="fragment_map"
-        tools:layout="@layout/fragment_map" >
+        tools:layout="@layout/fragment_map">
         <action
             android:id="@+id/action_fragmentMap_to_fragmentCamiones"
             app:destination="@id/fragmentCamiones"
@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/fragmentCamiones"
         android:name="com.myroute.fragments.FragmentCamiones"
-        android:label="FragmentCamiones" >
+        android:label="FragmentCamiones">
         <action
             android:id="@+id/action_fragmentCamiones_to_fragmentMap"
             app:destination="@id/fragmentMap"
@@ -47,7 +47,7 @@
     <fragment
         android:id="@+id/fragmentTrenes"
         android:name="com.myroute.fragments.FragmentTrenes"
-        android:label="FragmentTrenes" >
+        android:label="FragmentTrenes">
         <action
             android:id="@+id/action_fragmentTrenes_to_fragmentMap"
             app:destination="@id/fragmentMap"

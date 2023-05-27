@@ -13,12 +13,17 @@ import com.myroute.R
 import com.myroute.dbmanager.DBManager
 import com.myroute.models.Ruta
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
+import org.osmdroid.bonuspack.routing.Road
 import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
 
 class FragmentMap : Fragment() {
     private var param1: String? = null
@@ -36,9 +41,10 @@ class FragmentMap : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.i("MyRoute:Info", "Info puntp a")
         viewCont = inflater.inflate(R.layout.fragment_map, container, false)
+
         generateMap()
+        generateRoute()
         return viewCont
     }
 
@@ -55,13 +61,16 @@ class FragmentMap : Fragment() {
                 }
             }
 
-        @SuppressLint("StaticFieldLeak")
-        private lateinit var viewCont: View
 
+        private lateinit var viewCont: View
         private lateinit var mapView: MapView
         private lateinit var dbManager : DBManager
+        lateinit var id_route : String
+        lateinit var maincontext: MainActivity
+        lateinit var roadOverlay: Polyline
+        lateinit var road: Road
 
-        private fun generateMap(){
+        fun generateMap(){
             // Buscando la etiqueta
             mapView = viewCont.findViewById(R.id.mapView)
 
@@ -72,23 +81,33 @@ class FragmentMap : Fragment() {
             mapView.controller.setZoom(14.0)
         }
 
-        fun generateRoute(context: MainActivity, id_route: String) : Boolean{
-            dbManager = DBManager(context)
+        fun generateRoute() : Boolean{
+            if (!::id_route.isInitialized || id_route == null)return false
+            Log.i("MyRoute:Info", "Ruta a generar $id_route")
+            dbManager = DBManager(maincontext)
             val route : Ruta = dbManager.getRoute(id_route) ?: return false
+            id_route == null
 
-            if (context.coroutineManager == null || context.coroutineManager!!.isCompleted){context.coroutineManager = context.lifecycleScope.async(
-                Dispatchers.IO) {
+            mapView = viewCont.findViewById(R.id.mapView)
+
+            // Configuracion inicial
+            mapView.setTileSource(TileSourceFactory.MAPNIK)
+            mapView.setMultiTouchControls(true)
+            mapView.setBuiltInZoomControls(false)
+            mapView.controller.setZoom(14.0)
 
                 mapView.overlays.clear()
                 mapView.invalidate()
+                GlobalScope.launch {
+                    val roadManager = OSRMRoadManager(maincontext , OSRMRoadManager.MEAN_BY_CAR)
+                    road = roadManager.getRoad(route.getRefPoints())
+                    roadOverlay = RoadManager.buildRoadOverlay(road, route.getColor(), 15F)
+                }
 
-                val roadManager = OSRMRoadManager(context , OSRMRoadManager.MEAN_BY_CAR)
-                val road = roadManager.getRoad(route.getRefPoints())
-                val roadOverlay = RoadManager.buildRoadOverlay(road, route.getColor(), 15F)
+                while (!::roadOverlay.isInitialized || roadOverlay == null){}
 
                 mapView.overlays.add(roadOverlay)
-
-                val nodeIcon = context.resources.getDrawable(R.drawable.icono_parada)
+                val nodeIcon = maincontext.resources.getDrawable(R.drawable.icono_parada)
                 for (i in route.getRefStops()!!.indices) {
                     val nodeMarker = Marker(mapView)
                     nodeMarker.position = route.getRefStops()!![i]
@@ -102,8 +121,7 @@ class FragmentMap : Fragment() {
                 mapView.controller.setCenter(road.mBoundingBox.centerWithDateLine)
                 mapView.controller.setZoom(14.0)
 
-            }}else{return false}
-
+            roadOverlay == null
             return true
         }
     }
