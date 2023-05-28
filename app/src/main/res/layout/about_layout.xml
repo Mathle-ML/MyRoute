@@ -9,7 +9,15 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+<<<<<<< Updated upstream
         android:background="@color/background">
+=======
+        android:background="@drawable/app_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+>>>>>>> Stashed changes
 
         <ImageView
             android:id="@+id/menu_hamburguesa"

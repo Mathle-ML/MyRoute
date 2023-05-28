@@ -10,6 +10,10 @@ import androidx.cardview.widget.CardView
 import com.myroute.R
 import androidx.fragment.app.findFragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.myroute.CustomAdapter
 import com.myroute.MainActivity
 
 class FragmentCamiones : Fragment() {
@@ -31,39 +35,11 @@ class FragmentCamiones : Fragment() {
     ): View? {
         viewCont = inflater.inflate(R.layout.fragment_camiones, container, false)
 
-        val cv1 = viewCont.findViewById<CardView>(R.id.cv1)
-        val cv2 = viewCont.findViewById<CardView>(R.id.cv2)
-        val cv3 = viewCont.findViewById<CardView>(R.id.cv3)
-        val cv4 = viewCont.findViewById<CardView>(R.id.cv4)
+        val recyclerView = viewCont.findViewById<RecyclerView>(R.id.recyclerViewCamiones)
+        val adapter = CustomAdapter()
 
-        cv1.setOnClickListener {
-            mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-            MainActivity.isFragmentMap = true
-            MainActivity.isFragmentCamiones = false
-            MainActivity.btnCamiones.setSelected(false)
-            FragmentMap.routToGenerate = "C47-Panteon | Dos templos"
-        }
-        cv2.setOnClickListener {
-            mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-            MainActivity.isFragmentMap = true
-            MainActivity.isFragmentCamiones = false
-            MainActivity.btnCamiones.setSelected(false)
-            FragmentMap.routToGenerate = "C47-Kilometro 13 | Dos templos"
-        }
-        cv3.setOnClickListener {
-            mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-            MainActivity.isFragmentMap = true
-            MainActivity.isFragmentCamiones = false
-            MainActivity.btnCamiones.setSelected(false)
-            FragmentMap.routToGenerate = "C47-Panteon | Kilometro 13"
-        }
-        cv4.setOnClickListener {
-            mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-            MainActivity.isFragmentMap = true
-            MainActivity.isFragmentCamiones = false
-            MainActivity.btnCamiones.setSelected(false)
-            FragmentMap.routToGenerate = "C47_Kilometro 13 | Kilometro 13"
-        }
+        recyclerView.layoutManager = LinearLayoutManager(mainContext)
+        recyclerView.adapter = adapter
 
         return viewCont
     }

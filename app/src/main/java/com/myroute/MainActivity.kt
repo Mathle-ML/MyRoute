@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         FragmentMap.mainContext = this
         FragmentCamiones.mainContext = this
+        CustomAdapter.mainContext = this
 
         verifyResult = VerifyApp(this)
     }
