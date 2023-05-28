@@ -54,10 +54,10 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         val refStopsStr = cursor.getString(cursor.getColumnIndex(COLUMN_REF_STOPS))
         val color = cursor.getString(cursor.getColumnIndex(COLUMN_COLOR))
 
-        //Codigo provicional
+        /*Codigo provicional
         var type: String
         type = cursor.getString(cursor.getColumnIndex(COLUMN_TYPE))
-        if(type == null)type = "none"
+        if(type == null)type = "none"*/
 
         cursor.close()
         db.close()
@@ -80,7 +80,7 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         val refPointsArray: ArrayList<GeoPoint> = ArrayList(mutablepointsList)
         val refStopsArray: ArrayList<GeoPoint> = ArrayList(mutablestopsList)
 
-        return Ruta(idRoute, refPointsArray, refStopsArray, color, type)
+        return Ruta(idRoute, refPointsArray, refStopsArray, color, "none")
     }
 
     @SuppressLint("Range")

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/app_bar"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/menu_hamburguesa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/menu_hamburguesa" />
+
+        <TextView
+            android:id="@+id/tv_title_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:text="@string/app_name"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/menu_share_toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="19dp"
+                android:src="@android:drawable/ic_menu_share" />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Acerca de"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="110dp" />
+
+    <TextView
+        android:layout_width="371dp"
+        android:layout_height="wrap_content"
+        android:text="TODOS SOMOS USUARIOS OE TRANSPORTE PUBLICO. YA SEA PARA IR A LA ESCUELA. AL TRABAJO O INTERESES PERSONALES. TODOS SABEMOS LO AGOBIANTE E INSEGURO QUE ES ESPERAR EL CAMION UN TIEMPO INDEFINIDO. CON MY ROUTE BUSCAMOS QUE ESTO TERMINE YA. PARA ASI TODOS TENER EL CONTROL DE NUESTRAS RUTAS FAVORITAS. MY ROUTE ES UNA APPLICACION MOVIL CREADA PARA LAS Y LOS USUARIOS QUE SE LES DIFICULTA ENCONTRAR LAS RUTAS PARA LLEGAR A SU DESTINO. ASI COMO LA ACCESIBILIDAD PARA PERSONAS CON DISCAPACIDAD, HACIENDO QUE NUESTRA APP SEA INCLUSIVA NUESTRA MISION ES QUE TODOS Y TODAS ESTEN INFORMADOS SOBRE SuS RUTAS PARA ASI AGILIZAR Y MODERNIZAR ESTOS TRANSPORTES YA QUE SON PARTE OE NUESTRA VIDA COTIDIANA "
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="20dp"
+        tools:layout_editor_absoluteY="185dp"
+        android:textColor="@color/black"
+        android:justificationMode="inter_word"
+        android:textAlignment="viewStart"
+        android:lineSpacingExtra="4dp"/>
+
+    <ImageView
+        android:layout_width="213dp"
+        android:layout_height="191dp"
+        android:src="@drawable/icono"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="103dp"
+        tools:layout_editor_absoluteY="524dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

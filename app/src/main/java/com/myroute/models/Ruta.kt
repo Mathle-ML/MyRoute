@@ -8,27 +8,20 @@ class Ruta(
     private val refPointsArray: ArrayList<GeoPoint>,
     private val refStopsArray: ArrayList<GeoPoint>,
     private val color: String,
-    private val type: String)
-{
-    fun getIDRoute() : String{
-        return idRoute
-    }
-    fun getRouteType() : String{
-        return type
-    }
-    fun getRefPoints() : ArrayList<GeoPoint>?{
-        return refPointsArray
-    }
-    fun getRefStops() : ArrayList<GeoPoint>?{
-        return refStopsArray
-    }
-    fun getColor() : Int{
-        var color = 0
-        when(this.color){
-            "green" ->{
-                color = Color.rgb(11, 189, 28)
-            }
+    private val type: String
+) {
+    fun getIDRoute(): String = idRoute
+
+    fun getRouteType(): String = type
+
+    fun getRefPoints(): ArrayList<GeoPoint> = refPointsArray
+
+    fun getRefStops(): ArrayList<GeoPoint> = refStopsArray
+
+    fun getColor(): Int {
+        return when (color) {
+            "green" -> Color.rgb(11, 189, 28)
+            else -> Color.BLACK
         }
-        return color
     }
 }
