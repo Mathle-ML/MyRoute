@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.myroute.models.Colonia
 import com.myroute.models.Ruta
 import org.osmdroid.util.GeoPoint
 
@@ -13,22 +12,19 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
     companion object {
         private const val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "db.sqlite3"
+
         private const val TABLE_NAME_RUTAS = "rutas"
-        private const val TABLE_NAME_COLONIAS = "colonias"
+
         private const val COLUMN_ID_ROUTE = "id_route"
         private const val COLUMN_REF_POINTS = "ref_points"
         private const val COLUMN_REF_STOPS = "ref_stops"
         private const val COLUMN_COLOR = "color"
-        private const val COLUMN_ID_COLN = "id_coln"
-        private const val COLUMN_REF_ROUTS = "ref_routs"
-        private const val COLUMN_COLN_RADIO = "coln_radio"
-        private const val COLUMN_COLN_COLIN = "coln_colin"
+        private const val COLUMN_TYPE = "tipo"
     }
 
     //--------Metodos para el manejo de la base de datos--------//
     override fun onCreate(db: SQLiteDatabase?) {
-
-        val createRutasTable = "CREATE TABLE $TABLE_NAME_RUTAS ($COLUMN_ID_ROUTE TEXT PRIMARY KEY, $COLUMN_REF_POINTS TEXT, $COLUMN_REF_STOPS TEXT, $COLUMN_COLOR TEXT)"
+        val createRutasTable = "CREATE TABLE $TABLE_NAME_RUTAS ($COLUMN_ID_ROUTE TEXT PRIMARY KEY, $COLUMN_REF_POINTS TEXT, $COLUMN_REF_STOPS TEXT, $COLUMN_COLOR TEXT, $COLUMN_TYPE TEXT)"
         db?.execSQL(createRutasTable)
     }
 
@@ -58,6 +54,11 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         val refStopsStr = cursor.getString(cursor.getColumnIndex(COLUMN_REF_STOPS))
         val color = cursor.getString(cursor.getColumnIndex(COLUMN_COLOR))
 
+        //Codigo provicional
+        var type: String
+        type = cursor.getString(cursor.getColumnIndex(COLUMN_TYPE))
+        if(type == null)type = "none"
+
         cursor.close()
         db.close()
     
@@ -79,7 +80,7 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         val refPointsArray: ArrayList<GeoPoint> = ArrayList(mutablepointsList)
         val refStopsArray: ArrayList<GeoPoint> = ArrayList(mutablestopsList)
 
-        return Ruta(idRoute, refPointsArray, refStopsArray, color)
+        return Ruta(idRoute, refPointsArray, refStopsArray, color, type)
     }
 
     @SuppressLint("Range")

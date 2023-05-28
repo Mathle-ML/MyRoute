@@ -4,13 +4,17 @@ import android.graphics.Color
 import org.osmdroid.util.GeoPoint
 
 class Ruta(
-    private val idRoute : String,
-    private val refPointsArray : ArrayList<GeoPoint>,
-    private val refStopsArray : ArrayList<GeoPoint>,
-    private val color : String,)
+    private val idRoute: String,
+    private val refPointsArray: ArrayList<GeoPoint>,
+    private val refStopsArray: ArrayList<GeoPoint>,
+    private val color: String,
+    private val type: String)
 {
-    fun getIDRoute() : String?{
+    fun getIDRoute() : String{
         return idRoute
+    }
+    fun getRouteType() : String{
+        return type
     }
     fun getRefPoints() : ArrayList<GeoPoint>?{
         return refPointsArray
