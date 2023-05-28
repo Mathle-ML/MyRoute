@@ -9,7 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#B57E7E7E</color>
 
-    <color name="sky_blue">#9CD2D3</color>
     <color name="blue">#0799B6</color>
 
     <color name="jack_purple">#380036</color>
@@ -17,4 +16,6 @@
 
     <color name="jack_purplenv">#65380036</color>
     <color name="dorsey_bluenv">#650CBABA</color>
+
+    <color name="background">#254B5E</color>
 </resources>

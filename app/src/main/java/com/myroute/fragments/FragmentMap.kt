@@ -83,7 +83,7 @@ class FragmentMap : Fragment() {
 
                 mapView.overlays.clear()
                 mapView.overlays.add(roadOverlay)
-                val nodeIcon = mainContext.resources.getDrawable(R.drawable.icono_parada)
+                val nodeIcon = mainContext.resources.getDrawable(R.drawable.bus_stop)
                 for (i in route.getRefStops().indices) {
                     val nodeMarker = Marker(mapView)
                     nodeMarker.position = route.getRefStops()[i]
