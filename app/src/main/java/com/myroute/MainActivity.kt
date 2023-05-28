@@ -7,44 +7,49 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.material.appbar.MaterialToolbar
+import com.myroute.fragments.FragmentCamiones
 import com.myroute.fragments.FragmentMap
 import kotlinx.coroutines.Deferred
 
 class MainActivity : AppCompatActivity() {
-    var coroutineManager: Deferred<Unit>? = null
+    companion object{
+        var isFragmentMap = true
+        var isFragmentCamiones = false
+        var isFragmentTrenes = false
+        lateinit var btnCamiones: ImageButton
+        lateinit var btnTrenes: ImageButton
+        lateinit var btnMap: ImageButton
+    }
+
     private lateinit var verifyResult: VerifyApp
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        FragmentMap.maincontext = this
         supportActionBar?.hide()
-
         setSupportActionBar(findViewById(R.id.toolbar))
+
+        FragmentMap.mainContext = this
+        FragmentCamiones.mainContext = this
 
         verifyResult = VerifyApp(this)
     }
 
     fun startApp(){
-        var isFragmentMap = true
-        var isFragmentCamiones = false
-        var isFragmentTrenes = false
 
-        val btnCamiones: ImageButton = findViewById(R.id.btnCamiones)
-        val btnTrenes: ImageButton = findViewById(R.id.btnTrenes)
-        val btnMap: ImageButton = findViewById(R.id.btnMap)
+        btnCamiones = findViewById(R.id.btnCamiones)
+        btnTrenes = findViewById(R.id.btnTrenes)
+        btnMap = findViewById(R.id.btnMap)
+
         btnMap.setSelected(true)
         btnMap.setOnClickListener{
-
             if(isFragmentCamiones){
-                FragmentMap.id_route = "C47_Kilometro 13 | Kilometro 13"
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
                 isFragmentMap = true
                 isFragmentCamiones = false
                 btnCamiones.setSelected(false)
             }else if(isFragmentTrenes){
-                FragmentMap.id_route = "C47-Panteon | Dos templos"
                 findNavController(R.id.mainConainer).navigate(R.id.action_fragmentTrenes_to_fragmentMap)
                 isFragmentMap = true
                 isFragmentTrenes = false

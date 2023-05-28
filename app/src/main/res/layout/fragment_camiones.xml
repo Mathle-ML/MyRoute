@@ -22,6 +22,7 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cv1"
                 android:layout_width="390dp"
                 android:layout_height="280dp"
                 android:layout_marginTop="10dp"
@@ -30,9 +31,17 @@
                 app:cardCornerRadius="50dp"
                 app:cardElevation="25dp">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="C47-Panteon | Dos templos"
+                    android:textSize="20dp" />
+
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cv2"
                 android:layout_width="390dp"
                 android:layout_height="280dp"
                 android:layout_marginTop="10dp"
@@ -41,9 +50,17 @@
                 app:cardCornerRadius="50dp"
                 app:cardElevation="25dp">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="C47-Kilometro 13 | Dos templos"
+                    android:textSize="20dp" />
+
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cv3"
                 android:layout_width="390dp"
                 android:layout_height="280dp"
                 android:layout_marginTop="10dp"
@@ -51,17 +68,30 @@
                 app:cardBackgroundColor="#ECECEC"
                 app:cardCornerRadius="50dp"
                 app:cardElevation="25dp">
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="C47-Panteon | Kilometro 13"
+                    android:textSize="20dp" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cv4"
                 android:layout_width="390dp"
                 android:layout_height="280dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 app:cardBackgroundColor="#ECECEC"
                 app:cardCornerRadius="50dp"
-                app:cardElevation="25dp" />
+                app:cardElevation="25dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="C47_Kilometro 13 | Kilometro 13"
+                    android:textSize="20dp" />
+            </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="390dp"

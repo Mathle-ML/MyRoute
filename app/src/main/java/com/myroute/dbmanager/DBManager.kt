@@ -29,14 +29,11 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
     override fun onCreate(db: SQLiteDatabase?) {
 
         val createRutasTable = "CREATE TABLE $TABLE_NAME_RUTAS ($COLUMN_ID_ROUTE TEXT PRIMARY KEY, $COLUMN_REF_POINTS TEXT, $COLUMN_REF_STOPS TEXT, $COLUMN_COLOR TEXT)"
-        val createColoniasTable = "CREATE TABLE $TABLE_NAME_COLONIAS ($COLUMN_ID_COLN TEXT PRIMARY KEY, $COLUMN_REF_ROUTS TEXT, $COLUMN_COLN_RADIO REAL, $COLUMN_COLN_COLIN TEXT)"
         db?.execSQL(createRutasTable)
-        db?.execSQL(createColoniasTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME_RUTAS")
-        db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME_COLONIAS")
         onCreate(db)
     }
     //----------------------------------------------------------//
@@ -106,32 +103,6 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         db.close()
 
         return routes
-    }
-
-    @SuppressLint("Range")
-    fun getColonia(idColn: String): Colonia? {
-        val db = this.readableDatabase
-
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME_COLONIAS WHERE $COLUMN_ID_COLN=?", arrayOf(idColn))
-        if (cursor.count == 0) {
-            cursor.close()
-            db.close()
-            return null
-        }
-
-        cursor.moveToFirst()
-
-        val refRoutsStr = cursor.getString(cursor.getColumnIndex(COLUMN_REF_ROUTS))
-        val colnColinStr = cursor.getString(cursor.getColumnIndex(COLUMN_COLN_COLIN))
-        val colnRadio = cursor.getDouble(cursor.getColumnIndex(COLUMN_COLN_RADIO))
-
-        cursor.close()
-        db.close()
-
-        val refRoutsArray = refRoutsStr.split(",").toTypedArray()
-        val colnColinArray = colnColinStr.split(",").toTypedArray()
-
-        return Colonia(idColn, refRoutsArray, colnColinArray, colnRadio)
     }
     //----------------------------------------------------------//
 }
