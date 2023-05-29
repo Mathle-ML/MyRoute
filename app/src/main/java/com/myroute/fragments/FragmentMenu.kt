@@ -1,14 +1,16 @@
 package com.myroute.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.myroute.MainActivity
 import com.myroute.R
 
-class FragmentTrenes : Fragment() {
+class FragmentMenu : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
@@ -24,10 +26,16 @@ class FragmentTrenes : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        MainActivity.toolbar.visibility = View.VISIBLE
-        MainActivity.bottomBar.visibility = View.VISIBLE
+        MainActivity.toolbar.visibility = View.GONE
+        MainActivity.bottomBar.visibility = View.GONE
 
-        return inflater.inflate(R.layout.fragment_trenes, container, false)
+        val menuView = inflater.inflate(R.layout.fragment_menu, container, false)
+
+        val btnPanel = menuView.findViewById<Button>(R.id.btnPanel)
+        val btnAbout = menuView.findViewById<Button>(R.id.btnAbout)
+
+
+        return menuView
     }
 
     companion object {

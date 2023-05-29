@@ -2,9 +2,13 @@ package com.myroute
 
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.myroute.fragments.FragmentCamiones
@@ -19,6 +23,9 @@ class MainActivity : AppCompatActivity() {
         lateinit var btnCamiones: ImageButton
         lateinit var btnTrenes: ImageButton
         lateinit var btnMap: ImageButton
+        lateinit var mainContext : MainActivity
+        lateinit var toolbar: Toolbar
+        lateinit var bottomBar : CardView
     }
 
     private lateinit var verifyResult: VerifyApp
@@ -27,20 +34,42 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        supportActionBar?.hide()
+
+        /*supportActionBar?.hide()
+        setSupportActionBar(findViewById(R.id.toolbar))*/
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        FragmentMap.mainContext = this
-        FragmentCamiones.mainContext = this
+        mainContext = this
 
         verifyResult = VerifyApp(this)
     }
 
     fun startApp(){
 
+        instantiateEvents()
+
+
+    }
+
+    fun instantiateEvents(){
+
+        toolbar = findViewById(R.id.toolbar)
+        bottomBar = findViewById(R.id.cardView)
         btnCamiones = findViewById(R.id.btnCamiones)
         btnTrenes = findViewById(R.id.btnTrenes)
         btnMap = findViewById(R.id.btnMap)
+
+        val btnMenu = findViewById<ImageView>(R.id.menu)
+
+        btnMenu.setOnClickListener {
+            if(isFragmentMap){
+                findNavController(R.id.mainConainer).navigate(R.id.action_fragmentMap_to_fragmentMenu)
+            }else if(isFragmentCamiones){
+                findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMenu)
+            }else if (isFragmentTrenes){
+                findNavController(R.id.mainConainer).navigate(R.id.action_fragmentTrenes_to_fragmentMenu)
+            }
+        }
 
         btnMap.setSelected(true)
         btnMap.setOnClickListener{

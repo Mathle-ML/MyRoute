@@ -29,6 +29,9 @@ class FragmentCamiones : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        MainActivity.toolbar.visibility = View.VISIBLE
+        MainActivity.bottomBar.visibility = View.VISIBLE
+
         viewCont = inflater.inflate(R.layout.fragment_camiones, container, false)
 
         val cv1 = viewCont.findViewById<CardView>(R.id.cv1)
@@ -37,28 +40,28 @@ class FragmentCamiones : Fragment() {
         val cv4 = viewCont.findViewById<CardView>(R.id.cv4)
 
         cv1.setOnClickListener {
-            mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
+            MainActivity.mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
             MainActivity.isFragmentMap = true
             MainActivity.isFragmentCamiones = false
             MainActivity.btnCamiones.setSelected(false)
             FragmentMap.routToGenerate = "C47-Panteon | Dos templos"
         }
         cv2.setOnClickListener {
-            mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
+            MainActivity.mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
             MainActivity.isFragmentMap = true
             MainActivity.isFragmentCamiones = false
             MainActivity.btnCamiones.setSelected(false)
             FragmentMap.routToGenerate = "C47-Kilometro 13 | Dos templos"
         }
         cv3.setOnClickListener {
-            mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
+            MainActivity.mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
             MainActivity.isFragmentMap = true
             MainActivity.isFragmentCamiones = false
             MainActivity.btnCamiones.setSelected(false)
             FragmentMap.routToGenerate = "C47-Panteon | Kilometro 13"
         }
         cv4.setOnClickListener {
-            mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
+            MainActivity.mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
             MainActivity.isFragmentMap = true
             MainActivity.isFragmentCamiones = false
             MainActivity.btnCamiones.setSelected(false)
@@ -80,7 +83,6 @@ class FragmentCamiones : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
-        lateinit var mainContext: MainActivity
     }
 
 }

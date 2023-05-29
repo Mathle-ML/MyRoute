@@ -37,6 +37,9 @@ class FragmentMap : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        MainActivity.toolbar.visibility = View.VISIBLE
+        MainActivity.bottomBar.visibility = View.VISIBLE
+
         return inflater.inflate(R.layout.fragment_map, container, false).also {
             initView(it)
         }
@@ -64,8 +67,6 @@ class FragmentMap : Fragment() {
                 }
             }
 
-        @SuppressLint("StaticFieldLeak")
-        lateinit var mainContext: MainActivity
         var routToGenerate: String? = null
         private var coroutineManager: Job? = null
 
@@ -73,17 +74,17 @@ class FragmentMap : Fragment() {
         private fun generateRoute(mapView: MapView) {
             coroutineManager?.cancel()
             coroutineManager = CoroutineScope(Dispatchers.Main).launch {
-                val dbManager = DBManager(mainContext)
+                val dbManager = DBManager(MainActivity.mainContext)
                 val route: Ruta = dbManager.getRoute(routToGenerate ?: return@launch) ?: return@launch
                 val road = withContext(Dispatchers.IO) {
-                    val roadManager = OSRMRoadManager(mainContext, OSRMRoadManager.MEAN_BY_CAR)
+                    val roadManager = OSRMRoadManager(MainActivity.mainContext, OSRMRoadManager.MEAN_BY_CAR)
                     roadManager.getRoad(route.getRefPoints())
                 }
                 val roadOverlay = RoadManager.buildRoadOverlay(road, route.getColor(), 15F)
 
                 mapView.overlays.clear()
                 mapView.overlays.add(roadOverlay)
-                val nodeIcon = mainContext.resources.getDrawable(R.drawable.bus_stop)
+                val nodeIcon = MainActivity.mainContext.resources.getDrawable(R.drawable.bus_stop)
                 for (i in route.getRefStops().indices) {
                     val nodeMarker = Marker(mapView)
                     nodeMarker.position = route.getRefStops()[i]
