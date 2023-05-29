@@ -1,16 +1,15 @@
 package com.myroute.fragments
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
-import com.myroute.R
-import androidx.fragment.app.findFragment
-import androidx.navigation.findNavController
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.myroute.CustomAdapter
 import com.myroute.MainActivity
+import com.myroute.R
 
 class FragmentCamiones : Fragment() {
     private var param1: String? = null
@@ -33,8 +32,10 @@ class FragmentCamiones : Fragment() {
         MainActivity.bottomBar.visibility = View.VISIBLE
 
         viewCont = inflater.inflate(R.layout.fragment_camiones, container, false)
+        val recyclerView = viewCont.findViewById<RecyclerView>(R.id.recyclerViewCamiones)
+        val adapter = CustomAdapter()
 
-        val cv1 = viewCont.findViewById<CardView>(R.id.cv1)
+        /*val cv1 = viewCont.findViewById<CardView>(R.id.cv1)
         val cv2 = viewCont.findViewById<CardView>(R.id.cv2)
         val cv3 = viewCont.findViewById<CardView>(R.id.cv3)
         val cv4 = viewCont.findViewById<CardView>(R.id.cv4)
@@ -66,7 +67,10 @@ class FragmentCamiones : Fragment() {
             MainActivity.isFragmentCamiones = false
             MainActivity.btnCamiones.setSelected(false)
             FragmentMap.routToGenerate = "C47_Kilometro 13 | Kilometro 13"
-        }
+        }*/
+
+        recyclerView.layoutManager = LinearLayoutManager(MainActivity.mainContext)
+        recyclerView.adapter = adapter
 
         return viewCont
     }
