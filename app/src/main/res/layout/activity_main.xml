@@ -14,12 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="1.0"
         app:navGraph="@navigation/nav_graph">
 
     </androidx.fragment.app.FragmentContainerView>
@@ -28,17 +22,10 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-<<<<<<< Updated upstream
         android:background="@color/background">
-=======
-        android:background="@drawable/app_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
->>>>>>> Stashed changes
 
         <ImageView
-            android:id="@+id/menu_hamburguesa"
+            android:id="@+id/menu"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:src="@drawable/ic_menu"
@@ -68,25 +55,8 @@
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
-<<<<<<< Updated upstream
-=======
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mainConainer"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="781dp"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:navGraph="@navigation/nav_graph">
-
-    </androidx.fragment.app.FragmentContainerView>
-
->>>>>>> Stashed changes
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/background"
@@ -105,17 +75,16 @@
             style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:background="@drawable/nav_bar_style"
             android:gravity="center"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/btnTrenes"
+                android:background="@drawable/btn_style"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/btn__nav_bar_style"
                 android:contentDescription="ola"
                 android:elevation="25dp"
                 android:scaleType="fitCenter"
@@ -129,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/btn__nav_bar_style"
+                android:background="@drawable/btn_style"
                 android:elevation="25dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/map"
@@ -139,11 +108,11 @@
 
             <ImageButton
                 android:id="@+id/btnCamiones"
+                android:background="@drawable/btn_style"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/btn__nav_bar_style"
                 android:contentDescription="ola"
                 android:elevation="25dp"
                 android:scaleType="fitCenter"

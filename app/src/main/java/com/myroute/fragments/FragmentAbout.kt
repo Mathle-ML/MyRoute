@@ -5,16 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.myroute.CustomAdapter
-import com.myroute.MainActivity
 import com.myroute.R
 
-class FragmentCamiones : Fragment() {
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+class FragmentAbout : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var viewCont: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,29 +25,21 @@ class FragmentCamiones : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewCont = inflater.inflate(R.layout.fragment_camiones, container, false)
-        val recyclerView = viewCont.findViewById<RecyclerView>(R.id.recyclerViewCamiones)
-        val adapter = CustomAdapter()
-
-        recyclerView.layoutManager = LinearLayoutManager(mainContext)
-        recyclerView.adapter = adapter
-
-        return viewCont
+        return inflater.inflate(R.layout.fragment_trenes, container, false)
     }
 
     companion object {
-        const val ARG_PARAM1 = "param1"
-        const val ARG_PARAM2 = "param2"
+        private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
 
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            FragmentCamiones().apply {
+            FragmentTrenes().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
             }
-        lateinit var mainContext: MainActivity
     }
-
 }
+

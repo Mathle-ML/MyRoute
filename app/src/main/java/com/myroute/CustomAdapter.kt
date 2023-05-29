@@ -35,6 +35,7 @@ class CustomAdapter: RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
             MainActivity.isFragmentMap = true
             MainActivity.isFragmentCamiones = false
             MainActivity.btnCamiones.setSelected(false)
+            MainActivity.btnMap.setSelected(true)
             FragmentMap.routToGenerate = rutas[i].getIDRoute()
         }
     }
