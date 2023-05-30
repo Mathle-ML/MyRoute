@@ -1,13 +1,24 @@
 package com.myroute
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.PixelFormat
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,14 +26,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        this.startApp()
+
         mainContext = this
         verifyResult = VerifyApp(this)
+
     }
 
     fun startApp() {
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         initializeViews()
         initializeEvents()
     }
@@ -112,8 +127,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun verificationFailed(errors: List<VerificationError>) {
-        // Mostrar vista de error
+    fun showErrorDialog(errorCode : String, errorDesc : String){
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.error_layout)
+        dialog.setCancelable(true)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+        dialog.setOnCancelListener{
+            finish()
+        }
+
+        val errorCodeView = dialog.findViewById<TextView>(R.id.errorCode)
+        val errorDescView = dialog.findViewById<TextView>(R.id.errorDesc)
+        errorCodeView.text = errorCode
+        errorDescView.text = errorDesc
+    }
+
+    fun showWarnDialog(warnCode : String, warnDesc : String){
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.warn_layout)
+        dialog.setCancelable(true)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+
+        val warnCodeView = dialog.findViewById<TextView>(R.id.warnCode)
+        val warnDescView = dialog.findViewById<TextView>(R.id.warnDesc)
+        warnCodeView.text = warnCode
+        warnDescView.text = warnDesc
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

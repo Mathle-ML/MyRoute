@@ -6,69 +6,65 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.myroute.dbmanager.DBCheckUpdates
+import com.myroute.fragments.FragmentMap
 import org.osmdroid.config.Configuration
 import java.time.Duration
 import java.time.LocalDateTime
 
-
-enum class VerificationError {
-    PERMISSION_DENIED,
-    DB_UPDATE_FAILED
-}
-
 class VerifyApp(private val context: MainActivity) {
-    private var verificationErrors: MutableList<VerificationError> = mutableListOf()
-
-    private lateinit var dbupdate: DBCheckUpdates
+    private lateinit var dbUpdate: DBCheckUpdates
 
     init {
         verify()
     }
 
     private fun verify() {
-        getPermissions()
-        configureOSMDroid()
-    }
-
-    private fun configureOSMDroid(){
-        Configuration.getInstance().load(context, context.getSharedPreferences("osmdroid", 0))
-    }
-
-    private fun checkVerificationComplete() {
-        if (verificationErrors.isEmpty()) {
-            onVerificationComplete()
+        if (!configureOSMDroid()) {
+            context.showErrorDialog("Error en OSMDroid",
+                "La aplicación ha experimentado un error al intentar configurar OSMDroid. " +
+                        "Le sugerimos que intente abrir la aplicación nuevamente para resolver este problema. " +
+                        "Si el error persiste, le recomendamos ponerse en contacto con nuestro equipo de soporte para obtener ayuda adicional.")
         } else {
-            onVerificationFailed(verificationErrors)
+            getPermissions()
+            checkDBUpdate()
         }
     }
 
-    private fun handleVerificationFailure(error: VerificationError) {
-        verificationErrors.add(error)
-        checkVerificationComplete()
+    private fun configureOSMDroid(): Boolean {
+        return try {
+            Configuration.getInstance().load(context, context.getSharedPreferences("osmdroid", 0))
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
     private fun getPermissions() {
         val permissions = arrayOf(
-            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Pair(android.Manifest.permission.READ_EXTERNAL_STORAGE, 1),
+            Pair(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, 1),
+            Pair(android.Manifest.permission.INTERNET, 2),
+            Pair(android.Manifest.permission.ACCESS_COARSE_LOCATION, 3),
+            Pair(android.Manifest.permission.ACCESS_FINE_LOCATION, 3)
         )
-        val requestCode = 1
 
-        if (isPermissionGranted(permissions)) {
-            checkDBUpdate()
-        } else {
-            ActivityCompat.requestPermissions(context, permissions, requestCode)
+        val permissionsToRequest = permissions.filter { !isPermissionGranted(it.first) }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            val requestCode = permissionsToRequest.first().second
+            val permissionArray = permissionsToRequest.map { it.first }.toTypedArray()
+            ActivityCompat.requestPermissions(context, permissionArray, requestCode)
+        }else{
+            FragmentMap.hasLocationPermission = true
         }
     }
 
-    private fun isPermissionGranted(permissions: Array<String>): Boolean {
-        return permissions.all {
-            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-        }
+    private fun isPermissionGranted(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun checkDBUpdate() {
-        dbupdate = DBCheckUpdates(context)
+        dbUpdate = DBCheckUpdates(context)
         waitForUpdates()
     }
 
@@ -78,18 +74,15 @@ class VerifyApp(private val context: MainActivity) {
         } else {
             TODO("VERSION.SDK_INT < O")
         }
+
         var elapsedTime = 0L
         val endTime = startTime.plusSeconds(60)
 
-        while (!::dbupdate.isInitialized || !dbupdate.isUpdated) {
+        while (!::dbUpdate.isInitialized || !dbUpdate.isUpdated) {
             val currentTime = LocalDateTime.now()
 
             if (elapsedTime != Duration.between(startTime, currentTime).seconds) {
                 Log.i("MyRoute:DBManager/Update", "Tiempo transcurrido: $elapsedTime")
-                Log.i("MyRoute:Infor", "inicializada? ${::dbupdate.isInitialized}")
-                if (::dbupdate.isInitialized) {
-                    Log.i("MyRoute:Info", "actualizada? ${dbupdate.isUpdated}")
-                }
                 elapsedTime = Duration.between(startTime, currentTime).seconds
             }
 
@@ -99,29 +92,38 @@ class VerifyApp(private val context: MainActivity) {
             }
         }
 
-        if (dbupdate.isUpdated) {
-            checkVerificationComplete()
-        } else {
-            handleVerificationFailure(VerificationError.DB_UPDATE_FAILED)
+        if (!dbUpdate.isUpdated) {
+            context.showWarnDialog("Base de datos desactualizada",
+                "La base de datos no pudo actualizarse y puede contener información de rutas desactualizada. " +
+                        "Por favor, intente abrir la aplicación nuevamente para solucionar este error. " +
+                        "Si el problema persiste, le recomendamos ponerse en contacto con nuestro equipo de soporte para obtener asistencia adicional.")
         }
     }
 
     fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray) {
-        if (requestCode == 1) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i("MyRoute:Info", "Permisos concedidos")
-                checkDBUpdate()
-            } else {
-                handleVerificationFailure(VerificationError.PERMISSION_DENIED)
+        when (requestCode) {
+            1 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    context.showErrorDialog("Permisos denegados",
+                        "Para ejecutar la aplicación se necesitan permisos de escritura y lectura que no se han concedido.")
+                }
+            }
+            2 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    context.showErrorDialog("Permisos denegados",
+                        "Para actualizar la base de datos se necesitan permisos de acceso a internet que no se han concedido.")
+                }
+            }
+            3 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    FragmentMap.hasLocationPermission = true
+                }else{
+                    context.showWarnDialog("Permisos denegados",
+                        "La aplicación requiere el permiso de ubicación para mostrar su posición en el mapa. " +
+                                "Actualmente, el permiso de ubicación no ha sido concedido, lo que puede afectar negativamente " +
+                                "la experiencia de uso de la aplicación y la capacidad de ver su ubicación en el mapa.")
+                }
             }
         }
-    }
-
-    private fun onVerificationComplete() {
-        context.startApp()
-    }
-
-    private fun onVerificationFailed(errors: List<VerificationError>) {
-        context.verificationFailed(errors)
     }
 }

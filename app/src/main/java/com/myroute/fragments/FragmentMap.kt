@@ -1,7 +1,10 @@
 package com.myroute.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +21,7 @@ import kotlinx.coroutines.withContext
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 @Suppress("DEPRECATION")
@@ -50,14 +54,79 @@ class FragmentMap : Fragment() {
         mapView.setTileSource(TileSourceFactory.MAPNIK)
         mapView.setMultiTouchControls(true)
         mapView.setBuiltInZoomControls(false)
-        mapView.controller.setZoom(14.0)
+        mapView.controller.setZoom(4.0)
+
+        if (hasLocationPermission) {
+            val userLocation = getCurrentLocation()
+            Log.i("MyRoute:Info", "Hola: ${userLocation.toString()}")
+            userLocation?.let { location ->
+                val userLocationMarker = Marker(mapView)
+                userLocationMarker.position = location
+                userLocationMarker.icon = MainActivity.mainContext.resources.getDrawable(R.drawable.user_location)
+                userLocationMarker.title = "Mi ubicación"
+                mapView.overlays.add(userLocationMarker)
+
+                mapView.controller.setCenter(location)
+                mapView.controller.setZoom(19.0)
+            }
+        }
 
         generateRoute(mapView)
+    }
+
+    private fun getCurrentLocation() : GeoPoint?{
+        return try {
+            val locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+
+            location?.let {
+                val latitude = it.latitude
+                val longitude = it.longitude
+                GeoPoint(latitude, longitude)
+            }
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun generateRoute(mapView: MapView) {
+        coroutineManager?.cancel()
+        coroutineManager = CoroutineScope(Dispatchers.Main).launch {
+            val dbManager = DBManager(MainActivity.mainContext)
+            val route: Ruta = dbManager.getRoute(routToGenerate ?: return@launch) ?: return@launch
+            val road = withContext(Dispatchers.IO) {
+                val roadManager = OSRMRoadManager(MainActivity.mainContext, OSRMRoadManager.MEAN_BY_CAR)
+                roadManager.getRoad(route.getRefPoints())
+            }
+            val roadOverlay = RoadManager.buildRoadOverlay(road, route.getColor(), 15F)
+            mapView.overlays.add(roadOverlay)
+
+            val nodeIcon = MainActivity.mainContext.resources.getDrawable(R.drawable.bus_stop)
+            for (i in route.getRefStops().indices) {
+                val nodeMarker = Marker(mapView)
+                nodeMarker.position = route.getRefStops()[i]
+                nodeMarker.icon = nodeIcon
+                nodeMarker.title = "Step $i"
+                mapView.overlays.add(nodeMarker)
+            }
+
+            mapView.invalidate()
+
+            mapView.controller.setCenter(road.mBoundingBox.centerWithDateLine)
+            mapView.controller.setZoom(14.0)
+        }
     }
 
     companion object {
         const val ARG_PARAM1 = "param1"
         const val ARG_PARAM2 = "param2"
+
+        var hasLocationPermission = false
+        var routToGenerate: String? = null
+        private var coroutineManager: Job? = null
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             FragmentMap().apply {
@@ -66,39 +135,6 @@ class FragmentMap : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
-
-        var routToGenerate: String? = null
-        private var coroutineManager: Job? = null
-
-        @SuppressLint("UseCompatLoadingForDrawables")
-        private fun generateRoute(mapView: MapView) {
-            coroutineManager?.cancel()
-            coroutineManager = CoroutineScope(Dispatchers.Main).launch {
-                val dbManager = DBManager(MainActivity.mainContext)
-                val route: Ruta = dbManager.getRoute(routToGenerate ?: return@launch) ?: return@launch
-                val road = withContext(Dispatchers.IO) {
-                    val roadManager = OSRMRoadManager(MainActivity.mainContext, OSRMRoadManager.MEAN_BY_CAR)
-                    roadManager.getRoad(route.getRefPoints())
-                }
-                val roadOverlay = RoadManager.buildRoadOverlay(road, route.getColor(), 15F)
-
-                mapView.overlays.clear()
-                mapView.overlays.add(roadOverlay)
-                val nodeIcon = MainActivity.mainContext.resources.getDrawable(R.drawable.bus_stop)
-                for (i in route.getRefStops().indices) {
-                    val nodeMarker = Marker(mapView)
-                    nodeMarker.position = route.getRefStops()[i]
-                    nodeMarker.icon = nodeIcon
-                    nodeMarker.title = "Step $i"
-                    mapView.overlays.add(nodeMarker)
-                }
-
-                mapView.invalidate()
-
-                mapView.controller.setCenter(road.mBoundingBox.centerWithDateLine)
-                mapView.controller.setZoom(14.0)
-            }
-        }
     }
 }
 
