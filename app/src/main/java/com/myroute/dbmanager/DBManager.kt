@@ -21,36 +21,30 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
     companion object {
         private const val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "db.sqlite3"
+
         private const val TABLE_NAME_RUTAS = "rutas"
-        private const val TABLE_NAME_COLONIAS = "colonias"
+
         private const val COLUMN_ID_ROUTE = "id_route"
         private const val COLUMN_REF_POINTS = "ref_points"
         private const val COLUMN_REF_STOPS = "ref_stops"
         private const val COLUMN_COLOR = "color"
-        private const val COLUMN_ID_COLN = "id_coln"
-        private const val COLUMN_REF_ROUTS = "ref_routs"
-        private const val COLUMN_COLN_RADIO = "coln_radio"
-        private const val COLUMN_COLN_COLIN = "coln_colin"
+        private const val COLUMN_TYPE = "tipo"
     }
 
     //--------Metodos para el manejo de la base de datos--------//
     override fun onCreate(db: SQLiteDatabase?) {
-
-        val createRutasTable = "CREATE TABLE $TABLE_NAME_RUTAS ($COLUMN_ID_ROUTE TEXT PRIMARY KEY, $COLUMN_REF_POINTS TEXT, $COLUMN_REF_STOPS TEXT, $COLUMN_COLOR TEXT)"
-        val createColoniasTable = "CREATE TABLE $TABLE_NAME_COLONIAS ($COLUMN_ID_COLN TEXT PRIMARY KEY, $COLUMN_REF_ROUTS TEXT, $COLUMN_COLN_RADIO REAL, $COLUMN_COLN_COLIN TEXT)"
+        val createRutasTable = "CREATE TABLE $TABLE_NAME_RUTAS ($COLUMN_ID_ROUTE TEXT PRIMARY KEY, $COLUMN_REF_POINTS TEXT, $COLUMN_REF_STOPS TEXT, $COLUMN_COLOR TEXT, $COLUMN_TYPE TEXT)"
         db?.execSQL(createRutasTable)
-        db?.execSQL(createColoniasTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME_RUTAS")
-        db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME_COLONIAS")
         onCreate(db)
     }
     //----------------------------------------------------------//
 
     //-------------Metodos para obtener los modelos-------------//
-    fun addRoute(idRoute: String, refPoints: ArrayList<DoubleArray>, refStops: ArrayList<DoubleArray>, color: String) {
+    fun addRoute(idRoute: String, refPoints: ArrayList<DoubleArray>, refStops: ArrayList<DoubleArray>, color: String, type: String) {
         val db = this.writableDatabase
 
         // Checamos si la ruta existe
@@ -69,6 +63,7 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
             values.put(COLUMN_REF_STOPS, refStopsStr)
 
             values.put(COLUMN_COLOR, color)
+            values.put(COLUMN_TYPE, type)
 
             db.insert(TABLE_NAME_RUTAS, null, values)
         } else {
@@ -84,6 +79,7 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
             values.put(COLUMN_REF_STOPS, refStopsStr)
 
             values.put(COLUMN_COLOR, color)
+            values.put(COLUMN_TYPE, type)
 
             db.update(TABLE_NAME_RUTAS, values, "$COLUMN_ID_ROUTE=?", arrayOf(idRoute))
         }
@@ -135,57 +131,6 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
         return Ruta(idRoute, refPointsArray, refStopsArray, color)
     }
 
-    @SuppressLint("Range")
-    fun getAllRoutes(): ArrayList<Ruta>? {
-
-
-        val routes = ArrayList<Ruta>()
-        val db = this.readableDatabase
-
-        val cursor = db.rawQuery("SELECT $COLUMN_ID_ROUTE FROM $TABLE_NAME_RUTAS", null)
-
-        if (cursor.moveToFirst()) {
-            do {
-                val idRoute = cursor.getString(cursor.getColumnIndex(COLUMN_ID_ROUTE))
-                val route = getRoute(idRoute) // Utiliza el método existente getRoute para obtener cada ruta individualmente
-                route?.let {
-                    routes.add(it)
-                }
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-
-        return routes
-    }
-
-    @SuppressLint("Range")
-    fun getColonia(idColn: String): Colonia? {
-
-        val db = this.readableDatabase
-
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME_COLONIAS WHERE $COLUMN_ID_COLN=?", arrayOf(idColn))
-        if (cursor.count == 0) {
-            cursor.close()
-            db.close()
-            return null
-        }
-
-        cursor.moveToFirst()
-
-        val refRoutsStr = cursor.getString(cursor.getColumnIndex(COLUMN_REF_ROUTS))
-        val colnColinStr = cursor.getString(cursor.getColumnIndex(COLUMN_COLN_COLIN))
-        val colnRadio = cursor.getDouble(cursor.getColumnIndex(COLUMN_COLN_RADIO))
-
-        cursor.close()
-        db.close()
-
-        val refRoutsArray = refRoutsStr.split(",").toTypedArray()
-        val colnColinArray = colnColinStr.split(",").toTypedArray()
-
-        return Colonia(idColn, refRoutsArray, colnColinArray, colnRadio)
-    }
     //----------------------------------------------------------//
     fun copyDatabaseToDocumentsDirectory(): Boolean {
         val databasePath = context.getDatabasePath(DATABASE_NAME).absolutePath
