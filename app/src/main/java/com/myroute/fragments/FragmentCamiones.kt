@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.myroute.CustomAdapter
 import com.myroute.MainActivity
 import com.myroute.R
+import com.myroute.fragments.adapters.CustomAdapter
 
 class FragmentCamiones : Fragment() {
+
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var viewCont: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,53 +24,17 @@ class FragmentCamiones : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        MainActivity.toolbar.visibility = View.VISIBLE
-        MainActivity.bottomBar.visibility = View.VISIBLE
-
-        viewCont = inflater.inflate(R.layout.fragment_camiones, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val viewCont = inflater.inflate(R.layout.fragment_camiones, container, false)
         val recyclerView = viewCont.findViewById<RecyclerView>(R.id.recyclerViewCamiones)
         val adapter = CustomAdapter()
 
-        /*val cv1 = viewCont.findViewById<CardView>(R.id.cv1)
-        val cv2 = viewCont.findViewById<CardView>(R.id.cv2)
-        val cv3 = viewCont.findViewById<CardView>(R.id.cv3)
-        val cv4 = viewCont.findViewById<CardView>(R.id.cv4)
-
-        cv1.setOnClickListener {
-            MainActivity.mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-            MainActivity.isFragmentMap = true
-            MainActivity.isFragmentCamiones = false
-            MainActivity.btnCamiones.setSelected(false)
-            FragmentMap.routToGenerate = "C47-Panteon | Dos templos"
-        }
-        cv2.setOnClickListener {
-            MainActivity.mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-            MainActivity.isFragmentMap = true
-            MainActivity.isFragmentCamiones = false
-            MainActivity.btnCamiones.setSelected(false)
-            FragmentMap.routToGenerate = "C47-Kilometro 13 | Dos templos"
-        }
-        cv3.setOnClickListener {
-            MainActivity.mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-            MainActivity.isFragmentMap = true
-            MainActivity.isFragmentCamiones = false
-            MainActivity.btnCamiones.setSelected(false)
-            FragmentMap.routToGenerate = "C47-Panteon | Kilometro 13"
-        }
-        cv4.setOnClickListener {
-            MainActivity.mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentCamiones_to_fragmentMap)
-            MainActivity.isFragmentMap = true
-            MainActivity.isFragmentCamiones = false
-            MainActivity.btnCamiones.setSelected(false)
-            FragmentMap.routToGenerate = "C47_Kilometro 13 | Kilometro 13"
-        }*/
-
-        recyclerView.layoutManager = LinearLayoutManager(MainActivity.mainContext)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
+
+        // Actualizar visibilidad de la barra de herramientas y la barra inferior
+        MainActivity.toolbar.visibility = View.VISIBLE
+        MainActivity.bottomBar.visibility = View.VISIBLE
 
         return viewCont
     }
@@ -80,13 +44,11 @@ class FragmentCamiones : Fragment() {
         const val ARG_PARAM2 = "param2"
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FragmentCamiones().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        fun newInstance(param1: String, param2: String) = FragmentCamiones().apply {
+            arguments = Bundle().apply {
+                putString(ARG_PARAM1, param1)
+                putString(ARG_PARAM2, param2)
             }
+        }
     }
-
 }

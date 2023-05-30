@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import com.myroute.MainActivity
 import com.myroute.R
 
-class FragmentTerms : Fragment() {
+class FragmentPrivacity : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
@@ -26,8 +24,8 @@ class FragmentTerms : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        MainActivity.isFragmentTerms = true
-        return inflater.inflate(R.layout.fragment_terms, container, false)
+        MainActivity.isFragmentPricavity = true
+        return inflater.inflate(R.layout.fragment_privacity, container, false)
     }
 
     companion object {

@@ -4,16 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.myroute.MainActivity
-import androidx.fragment.app.Fragment
 import com.myroute.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 class FragmentAbout : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
@@ -30,15 +26,8 @@ class FragmentAbout : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val mainView = inflater.inflate(R.layout.fragment_about, container, false)
-
-        val menu = mainView.findViewById<ImageView>(R.id.menu)
-
-        menu.setOnClickListener {
-            MainActivity.mainContext.findNavController(R.id.mainConainer).navigate(R.id.action_fragmentAbout_to_fragmentMenu)
-        }
-
-        return mainView
+        MainActivity.isFragmentAbout = true
+        return inflater.inflate(R.layout.fragment_about, container, false)
     }
 
     companion object {

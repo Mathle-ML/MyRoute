@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
-                android:text="Terminos y condiciones"
+                android:text="Aviso de privacidad"
                 android:textColor="@color/black"
                 android:textSize="30dp"
                 android:textStyle="bold"
@@ -38,19 +38,7 @@
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="110dp" />
 
-            <TextView
-                android:layout_width="371dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:justificationMode="inter_word"
-                android:lineSpacingExtra="4dp"
-                android:text="1. Definiciones"
-                android:textAlignment="viewStart"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="20dp"
-                tools:layout_editor_absoluteY="204dp" />
+
 
             <TextView
                 android:layout_width="371dp"
@@ -58,10 +46,7 @@
                 android:layout_marginBottom="10dp"
                 android:justificationMode="inter_word"
                 android:lineSpacingExtra="4dp"
-                android:text="En estos términos y condiciones, los siguientes términos tendrán los siguientes significados:
-                            \na. &quot;AA El puente de contención&quot; se refiere a la empresa propietaria y desarrolladora de la aplicación móvil MyRoute.
-                            \nb. &quot;MyRoute&quot; se refiere a la aplicación móvil propiedad de AA El puente de contención.
-                            \nc. &quot;Usuario&quot; se refiere a cualquier persona que use la aplicación móvil MyRoute."
+                android:text="@string/privacity"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 tools:ignore="MissingConstraints,TextSizeCheck"

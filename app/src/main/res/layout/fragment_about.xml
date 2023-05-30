@@ -5,80 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/background">
-
-        <ImageView
-            android:id="@+id/menu"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/ic_menu" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_title_toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <RelativeLayout
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="Acerca de"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:layout_marginTop="104dp"
+            tools:ignore="MissingConstraints"/>
 
-            <ImageView
-                android:id="@+id/menu_share_toolbar"
-                android:layout_width="26dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="19sp"
-                android:src="@drawable/ic_share" />
-        </RelativeLayout>
-    </androidx.appcompat.widget.Toolbar>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:lineSpacingExtra="4dp"
+            android:text="TODOS SOMOS USUARIOS OE TRANSPORTE PUBLICO. YA SEA PARA IR A LA ESCUELA. AL TRABAJO O INTERESES PERSONALES. TODOS SABEMOS LO AGOBIANTE E INSEGURO QUE ES ESPERAR EL CAMION UN TIEMPO INDEFINIDO. CON MY ROUTE BUSCAMOS QUE ESTO TERMINE YA. PARA ASI TODOS TENER EL CONTROL DE NUESTRAS RUTAS FAVORITAS. MY ROUTE ES UNA APPLICACION MOVIL CREADA PARA LAS Y LOS USUARIOS QUE SE LES DIFICULTA ENCONTRAR LAS RUTAS PARA LLEGAR A SU DESTINO. ASI COMO LA ACCESIBILIDAD PARA PERSONAS CON DISCAPACIDAD, HACIENDO QUE NUESTRA APP SEA INCLUSIVA NUESTRA MISION ES QUE TODOS Y TODAS ESTEN INFORMADOS SOBRE SuS RUTAS PARA ASI AGILIZAR Y MODERNIZAR ESTOS TRANSPORTES YA QUE SON PARTE OE NUESTRA VIDA COTIDIANA "
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:padding="20dp"
+            tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Acerca de"
-        android:textColor="@color/black"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.451"
-        tools:ignore="MissingConstraints"/>
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="371dp"
-        android:layout_height="wrap_content"
-        android:justificationMode="inter_word"
-        android:lineSpacingExtra="4dp"
-        android:text="TODOS SOMOS USUARIOS OE TRANSPORTE PUBLICO. YA SEA PARA IR A LA ESCUELA. AL TRABAJO O INTERESES PERSONALES. TODOS SABEMOS LO AGOBIANTE E INSEGURO QUE ES ESPERAR EL CAMION UN TIEMPO INDEFINIDO. CON MY ROUTE BUSCAMOS QUE ESTO TERMINE YA. PARA ASI TODOS TENER EL CONTROL DE NUESTRAS RUTAS FAVORITAS. MY ROUTE ES UNA APPLICACION MOVIL CREADA PARA LAS Y LOS USUARIOS QUE SE LES DIFICULTA ENCONTRAR LAS RUTAS PARA LLEGAR A SU DESTINO. ASI COMO LA ACCESIBILIDAD PARA PERSONAS CON DISCAPACIDAD, HACIENDO QUE NUESTRA APP SEA INCLUSIVA NUESTRA MISION ES QUE TODOS Y TODAS ESTEN INFORMADOS SOBRE SuS RUTAS PARA ASI AGILIZAR Y MODERNIZAR ESTOS TRANSPORTES YA QUE SON PARTE OE NUESTRA VIDA COTIDIANA "
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.443"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="213dp"
-        android:layout_height="191dp"
-        android:src="@drawable/icono"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        tools:ignore="MissingConstraints" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/icono"
+            tools:ignore="MissingConstraints" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
