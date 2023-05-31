@@ -2,6 +2,7 @@ package com.myroute.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +25,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
+
 @Suppress("DEPRECATION")
 class FragmentMap : Fragment() {
     private var param1: String? = null
@@ -71,7 +74,7 @@ class FragmentMap : Fragment() {
             }
         }
 
-        generateRoute(mapView)
+        generateRouteIfExist(mapView)
     }
 
     private fun getCurrentLocation() : GeoPoint?{
@@ -90,12 +93,23 @@ class FragmentMap : Fragment() {
         }
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun generateRoute(mapView: MapView) {
+    fun generateRouteIfExist(mapView: MapView){
         coroutineManager?.cancel()
         coroutineManager = CoroutineScope(Dispatchers.Main).launch {
             val dbManager = DBManager(MainActivity.mainContext)
             val route: Ruta = dbManager.getRoute(routToGenerate ?: return@launch) ?: return@launch
+            when(route.getRouteType()){
+                "bus"->generateBusRoute(route, mapView)
+                "train"->generateTrainRoute(route, mapView)
+            }
+
+
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    suspend fun generateBusRoute(route: Ruta, mapView: MapView) {
+
             val road = withContext(Dispatchers.IO) {
                 val roadManager = OSRMRoadManager(MainActivity.mainContext, OSRMRoadManager.MEAN_BY_CAR)
                 roadManager.getRoad(route.getRefPoints())
@@ -116,7 +130,26 @@ class FragmentMap : Fragment() {
 
             mapView.controller.setCenter(road.mBoundingBox.centerWithDateLine)
             mapView.controller.setZoom(14.0)
+
+    }
+
+    fun generateTrainRoute(route: Ruta, mapView: MapView){
+        val polyline = Polyline()
+
+        for (point in route.getRefPoints()) {
+            polyline.addPoint(point)
         }
+
+        polyline.color = Color.RED // Cambia "Color.RED" por el color deseado
+
+        for (i in route.getRefStops()) {
+            val marker = Marker(mapView)
+            marker.position = i
+            marker.icon = resources.getDrawable(R.drawable.bus_stop) // Reemplaza "R.drawable.marker_icon" con tu propio recurso de icono
+            mapView.overlayManager.add(marker)
+        }
+
+        mapView.overlayManager.add(polyline)
     }
 
     companion object {

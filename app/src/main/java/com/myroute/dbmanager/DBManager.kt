@@ -19,7 +19,7 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         private const val COLUMN_REF_POINTS = "ref_points"
         private const val COLUMN_REF_STOPS = "ref_stops"
         private const val COLUMN_COLOR = "color"
-        private const val COLUMN_TYPE = "tipo"
+        private const val COLUMN_TYPE = "type"
     }
 
     //--------Metodos para el manejo de la base de datos--------//
@@ -40,7 +40,7 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
     fun getRoute(idRoute: String): Ruta? {
         val db = this.readableDatabase
 
-        val cursor = db.rawQuery("SELECT $COLUMN_REF_POINTS, $COLUMN_REF_STOPS, $COLUMN_COLOR FROM $TABLE_NAME_RUTAS WHERE $COLUMN_ID_ROUTE=?", arrayOf(idRoute))
+        val cursor = db.rawQuery("SELECT $COLUMN_REF_POINTS, $COLUMN_REF_STOPS, $COLUMN_COLOR, $COLUMN_TYPE FROM $TABLE_NAME_RUTAS WHERE $COLUMN_ID_ROUTE=?", arrayOf(idRoute))
 
         if (cursor.count == 0) {
             cursor.close()
@@ -53,11 +53,8 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         val refPointsStr = cursor.getString(cursor.getColumnIndex(COLUMN_REF_POINTS))
         val refStopsStr = cursor.getString(cursor.getColumnIndex(COLUMN_REF_STOPS))
         val color = cursor.getString(cursor.getColumnIndex(COLUMN_COLOR))
+        val type = cursor.getString(cursor.getColumnIndex(COLUMN_TYPE))
 
-        /*Codigo provicional
-        var type: String
-        type = cursor.getString(cursor.getColumnIndex(COLUMN_TYPE))
-        if(type == null)type = "none"*/
 
         cursor.close()
         db.close()
@@ -80,7 +77,7 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         val refPointsArray: ArrayList<GeoPoint> = ArrayList(mutablepointsList)
         val refStopsArray: ArrayList<GeoPoint> = ArrayList(mutablestopsList)
 
-        return Ruta(idRoute, refPointsArray, refStopsArray, color, "none")
+        return Ruta(idRoute, refPointsArray, refStopsArray, color, type)
     }
 
     @SuppressLint("Range")
