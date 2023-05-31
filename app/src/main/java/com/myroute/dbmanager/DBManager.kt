@@ -81,20 +81,28 @@ class DBManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
     }
 
     @SuppressLint("Range")
-    fun getAllRoutes(): ArrayList<Ruta> {
+    fun getAllRoutes(type: String? = null): ArrayList<Ruta> {
         val routes = ArrayList<Ruta>()
-        val db = this.readableDatabase
+        val db = readableDatabase
 
-        val cursor = db.rawQuery("SELECT $COLUMN_ID_ROUTE FROM $TABLE_NAME_RUTAS", null)
+        val selection = if (type != null) "$COLUMN_TYPE = ?" else null
+        val selectionArgs = if (type != null) arrayOf(type) else null
 
-        if (cursor.moveToFirst()) {
-            do {
-                val idRoute = cursor.getString(cursor.getColumnIndex(COLUMN_ID_ROUTE))
-                val route = getRoute(idRoute) // Utiliza el método existente getRoute para obtener cada ruta individualmente
-                route?.let {
-                    routes.add(it)
-                }
-            } while (cursor.moveToNext())
+        val cursor = db.query(
+            TABLE_NAME_RUTAS,
+            arrayOf(COLUMN_ID_ROUTE),
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+
+        while (cursor.moveToNext()) {
+            val idRoute = cursor.getString(cursor.getColumnIndex(COLUMN_ID_ROUTE))
+            getRoute(idRoute)?.let { route ->
+                routes.add(route)
+            }
         }
 
         cursor.close()

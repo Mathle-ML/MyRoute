@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewPrueba"
+    android:layout_width="wrap_content"
+    android:layout_height="85dp"
+    android:layout_margin="12dp"
+    card_view:cardBackgroundColor="#ECECEC"
+    card_view:cardCornerRadius="25dp"
+    card_view:cardElevation="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/bus"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="C47 - Kilometro 13"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="16dp"
+            android:layout_toEndOf="@id/image"
+            android:layout_toRightOf="@id/image"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destino: Dos templos"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:layout_toEndOf="@id/image"
+            android:layout_toRightOf="@id/image"
+            android:layout_below="@id/title"
+            />
+        <ImageView
+            android:id="@+id/color"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginTop="75dp" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:id="@+id/button1" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

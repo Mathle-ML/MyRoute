@@ -46,7 +46,6 @@ class FragmentMap : Fragment() {
     ): View {
         MainActivity.toolbar.visibility = View.VISIBLE
         MainActivity.bottomBar.visibility = View.VISIBLE
-
         return inflater.inflate(R.layout.fragment_map, container, false).also {
             initView(it)
         }
@@ -54,38 +53,34 @@ class FragmentMap : Fragment() {
 
     private fun initView(view: View) {
         val mapView = view.findViewById<MapView>(R.id.mapView)
-        mapView.setTileSource(TileSourceFactory.MAPNIK)
-        mapView.setMultiTouchControls(true)
-        mapView.setBuiltInZoomControls(false)
-        mapView.controller.setZoom(4.0)
-
+        setupMapView(mapView)
         if (hasLocationPermission) {
-            val userLocation = getCurrentLocation()
-            Log.i("MyRoute:Info", "Hola: ${userLocation.toString()}")
-            userLocation?.let { location ->
-                val userLocationMarker = Marker(mapView)
-                userLocationMarker.position = location
-                userLocationMarker.icon = MainActivity.mainContext.resources.getDrawable(R.drawable.user_location)
-                userLocationMarker.title = "Mi ubicación"
-                mapView.overlays.add(userLocationMarker)
-
-                mapView.controller.setCenter(location)
-                mapView.controller.setZoom(19.0)
+            getCurrentLocation()?.let { location ->
+                addUserLocationMarker(mapView, location)
+                mapView.controller.apply {
+                    setCenter(location)
+                    setZoom(19.0)
+                }
             }
         }
-
         generateRouteIfExist(mapView)
     }
 
-    private fun getCurrentLocation() : GeoPoint?{
+    private fun setupMapView(mapView: MapView) {
+        mapView.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            setMultiTouchControls(true)
+            setBuiltInZoomControls(false)
+            controller.setZoom(4.0)
+        }
+    }
+
+    private fun getCurrentLocation(): GeoPoint? {
         return try {
             val locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
             val location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-
             location?.let {
-                val latitude = it.latitude
-                val longitude = it.longitude
-                GeoPoint(latitude, longitude)
+                GeoPoint(it.latitude, it.longitude)
             }
         } catch (e: SecurityException) {
             e.printStackTrace()
@@ -93,63 +88,72 @@ class FragmentMap : Fragment() {
         }
     }
 
-    fun generateRouteIfExist(mapView: MapView){
+    private fun generateRouteIfExist(mapView: MapView) {
         coroutineManager?.cancel()
         coroutineManager = CoroutineScope(Dispatchers.Main).launch {
             val dbManager = DBManager(MainActivity.mainContext)
             val route: Ruta = dbManager.getRoute(routToGenerate ?: return@launch) ?: return@launch
-            when(route.getRouteType()){
-                "bus"->generateBusRoute(route, mapView)
-                "train"->generateTrainRoute(route, mapView)
+            when (route.getRouteType()) {
+                "bus" -> generateBusRoute(route, mapView)
+                "train" -> generateTrainRoute(route, mapView)
             }
-
-
         }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    suspend fun generateBusRoute(route: Ruta, mapView: MapView) {
+    private suspend fun generateBusRoute(route: Ruta, mapView: MapView) {
+        val road = withContext(Dispatchers.IO) {
+            val roadManager = OSRMRoadManager(MainActivity.mainContext, OSRMRoadManager.MEAN_BY_CAR)
+            roadManager.getRoad(route.getRefPoints())
+        }
+        val roadOverlay = RoadManager.buildRoadOverlay(road, route.getColor(), 15F)
+        mapView.overlays.add(roadOverlay)
 
-            val road = withContext(Dispatchers.IO) {
-                val roadManager = OSRMRoadManager(MainActivity.mainContext, OSRMRoadManager.MEAN_BY_CAR)
-                roadManager.getRoad(route.getRefPoints())
+        val nodeIcon = resources.getDrawable(R.drawable.bus_stop)
+        for (i in route.getRefStops().indices) {
+            val nodeMarker = Marker(mapView)
+            nodeMarker.apply {
+                position = route.getRefStops()[i]
+                icon = nodeIcon
+                title = "Step $i"
             }
-            val roadOverlay = RoadManager.buildRoadOverlay(road, route.getColor(), 15F)
-            mapView.overlays.add(roadOverlay)
-
-            val nodeIcon = MainActivity.mainContext.resources.getDrawable(R.drawable.bus_stop)
-            for (i in route.getRefStops().indices) {
-                val nodeMarker = Marker(mapView)
-                nodeMarker.position = route.getRefStops()[i]
-                nodeMarker.icon = nodeIcon
-                nodeMarker.title = "Step $i"
-                mapView.overlays.add(nodeMarker)
-            }
-
-            mapView.invalidate()
-
-            mapView.controller.setCenter(road.mBoundingBox.centerWithDateLine)
-            mapView.controller.setZoom(14.0)
-
-    }
-
-    fun generateTrainRoute(route: Ruta, mapView: MapView){
-        val polyline = Polyline()
-
-        for (point in route.getRefPoints()) {
-            polyline.addPoint(point)
+            mapView.overlays.add(nodeMarker)
         }
 
-        polyline.color = Color.RED // Cambia "Color.RED" por el color deseado
+        mapView.invalidate()
+
+        mapView.controller.apply {
+            setCenter(road.mBoundingBox.centerWithDateLine)
+            setZoom(14.0)
+        }
+    }
+
+    private fun generateTrainRoute(route: Ruta, mapView: MapView) {
+        val polyline = Polyline().apply {
+            route.getRefPoints().forEach { addPoint(it) }
+            color = Color.RED // Cambia "Color.RED" por el color deseado
+        }
 
         for (i in route.getRefStops()) {
             val marker = Marker(mapView)
-            marker.position = i
-            marker.icon = resources.getDrawable(R.drawable.bus_stop) // Reemplaza "R.drawable.marker_icon" con tu propio recurso de icono
+            marker.apply {
+                position = i
+                icon = resources.getDrawable(R.drawable.bus_stop) // Reemplaza "R.drawable.marker_icon" con tu propio recurso de icono
+            }
             mapView.overlayManager.add(marker)
         }
 
         mapView.overlayManager.add(polyline)
+    }
+
+    private fun addUserLocationMarker(mapView: MapView, location: GeoPoint) {
+        val userMarker = Marker(mapView)
+        userMarker.apply {
+            position = location
+            icon = resources.getDrawable(R.drawable.user_location) // Reemplaza "R.drawable.user_marker" con tu propio recurso de icono
+            title = "User Location"
+        }
+        mapView.overlays.add(userMarker)
     }
 
     companion object {
@@ -170,10 +174,3 @@ class FragmentMap : Fragment() {
             }
     }
 }
-
-
-
-
-
-
-
