@@ -28,7 +28,7 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
         private const val COLUMN_REF_POINTS = "ref_points"
         private const val COLUMN_REF_STOPS = "ref_stops"
         private const val COLUMN_COLOR = "color"
-        private const val COLUMN_TYPE = "tipo"
+        private const val COLUMN_TYPE = "type"
     }
 
     //--------Metodos para el manejo de la base de datos--------//
