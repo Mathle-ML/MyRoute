@@ -292,17 +292,17 @@ class MainActivity : AppCompatActivity() {
         )
 
         var dbmanager = DBManager(this)
-        dbmanager.addRoute("C47 Kilometro 13 | Dos templos", c47_refPoints, c47_refStops, R.color.green, "bus")
-        dbmanager.addRoute("C47 Panteon | Dos templos", c47_refPoints, c47_refStops, R.color.green, "bus")
-        dbmanager.addRoute("C87 | Manuel M o Degollado", c87_refPoints, c87_refPoints, R.color.green, "bus")
-        dbmanager.addRoute("T04 Loma Dorada | Juan Gil Preciado", c87_refPoints, c87_refPoints,R.color.green, "bus")
-        dbmanager.addRoute("T04 Loma Dorada | Pedro Alarcon", c87_refPoints, c87_refPoints, R.color.green, "bus")
-        dbmanager.addRoute("T18 Lopez Mateos | San Elías", c87_refPoints, c87_refPoints, R.color.red, "bus")
-        dbmanager.addRoute("T18 Lopez Mateos | Washington", c87_refPoints, c87_refPoints, R.color.red, "bus")
+        dbmanager.addRoute("C47 Kilometro 13 | Dos templos", c47_refPoints, c47_refStops, "green", "bus")
+        dbmanager.addRoute("C47 Panteon | Dos templos", c47_refPoints, c47_refStops, "green", "bus")
+        dbmanager.addRoute("C87 | Manuel M o Degollado", c87_refPoints, c87_refPoints, "green", "bus")
+        dbmanager.addRoute("T04 Loma Dorada | Juan Gil Preciado", c87_refPoints, c87_refPoints,"green", "bus")
+        dbmanager.addRoute("T04 Loma Dorada | Pedro Alarcon", c87_refPoints, c87_refPoints, "green", "bus")
+        dbmanager.addRoute("T18 Lopez Mateos | San Elías", c87_refPoints, c87_refPoints, "green", "bus")
+        dbmanager.addRoute("T18 Lopez Mateos | Washington", c87_refPoints, c87_refPoints, "green", "bus")
 
-        dbmanager.addRoute("Linea 1 | Juárez - Aviación", linea1_refPoints, linea1_refStops, R.color.brown, "train")
-        dbmanager.addRoute("Linea 2 | Tetlán - Tonalá", linea2_refPoints, linea2_refStops, R.color.green_train, "train")
-        dbmanager.addRoute("Linea 3 | Central nueva - Zapopan", linea3_refPoints, linea3_refStops, R.color.pink, "train")
+        dbmanager.addRoute("Linea 1 | Juárez - Aviación", linea1_refPoints, linea1_refStops, "brown", "train")
+        dbmanager.addRoute("Linea 2 | Tetlán - Tonalá", linea2_refPoints, linea2_refStops, "green_train", "train")
+        dbmanager.addRoute("Linea 3 | Central nueva - Zapopan", linea3_refPoints, linea3_refStops, "pink", "train")
 
         checkPermissionsAndCopyDatabase()
 

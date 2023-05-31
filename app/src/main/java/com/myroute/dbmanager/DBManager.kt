@@ -33,7 +33,7 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
 
     //--------Metodos para el manejo de la base de datos--------//
     override fun onCreate(db: SQLiteDatabase?) {
-        val createRutasTable = "CREATE TABLE $TABLE_NAME_RUTAS ($COLUMN_ID_ROUTE TEXT PRIMARY KEY, $COLUMN_REF_POINTS TEXT, $COLUMN_REF_STOPS TEXT, $COLUMN_COLOR INT, $COLUMN_TYPE TEXT)"
+        val createRutasTable = "CREATE TABLE $TABLE_NAME_RUTAS ($COLUMN_ID_ROUTE TEXT PRIMARY KEY, $COLUMN_REF_POINTS TEXT, $COLUMN_REF_STOPS TEXT, $COLUMN_COLOR TEXT, $COLUMN_TYPE TEXT)"
         db?.execSQL(createRutasTable)
     }
 
@@ -44,7 +44,7 @@ class DBManager(private val context: MainActivity) : SQLiteOpenHelper(context, D
     //----------------------------------------------------------//
 
     //-------------Metodos para obtener los modelos-------------//
-    fun addRoute(idRoute: String, refPoints: ArrayList<DoubleArray>, refStops: ArrayList<DoubleArray>, color: Int, type: String) {
+    fun addRoute(idRoute: String, refPoints: ArrayList<DoubleArray>, refStops: ArrayList<DoubleArray>, color: String, type: String) {
         val db = this.writableDatabase
 
         // Checamos si la ruta existe
