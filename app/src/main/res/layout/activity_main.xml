@@ -17,7 +17,7 @@
         android:id="@+id/cardView"
         android:layout_width="412dp"
         android:layout_height="145dp"
-        app:cardBackgroundColor="@color/sky_blue"
+        app:cardBackgroundColor="@color/red"
         app:cardCornerRadius="50dp"
         app:cardElevation="25dp"
         app:cardPreventCornerOverlap="true"
@@ -61,7 +61,7 @@
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/sky_blue"
+        app:cardBackgroundColor="@color/red"
         app:cardCornerRadius="50dp"
         app:cardElevation="25dp"
         app:cardPreventCornerOverlap="true"
@@ -101,7 +101,7 @@
                 android:elevation="25dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/map"
-                app:tint="@color/blue" />
+                app:tint="@color/red" />
 
             <ImageButton
                 android:id="@+id/btnCamiones"

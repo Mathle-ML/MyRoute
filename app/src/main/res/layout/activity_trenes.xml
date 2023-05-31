@@ -59,7 +59,7 @@
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/sky_blue"
+        app:cardBackgroundColor="@color/red"
         app:cardCornerRadius="50dp"
         app:cardElevation="25dp"
         app:cardPreventCornerOverlap="true"
@@ -88,7 +88,7 @@
                 android:elevation="25dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/train"
-                android:tint="@color/blue" />
+                app:tint="@color/red" />
 
             <ImageButton
                 android:id="@+id/btnMap"

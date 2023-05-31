@@ -7,7 +7,7 @@ class Ruta(
     private val idRoute : String,
     private val refPointsArray : ArrayList<GeoPoint>,
     private val refStopsArray : ArrayList<GeoPoint>,
-    private val color : String,)
+    private val color : Int,)
 {
     fun getIDRoute() : String?{
         return idRoute
@@ -19,12 +19,6 @@ class Ruta(
         return refStopsArray
     }
     fun getColor() : Int{
-        var color = 0
-        when(this.color){
-            "green" ->{
-                color = Color.rgb(11, 189, 28)
-            }
-        }
         return color
     }
 }
