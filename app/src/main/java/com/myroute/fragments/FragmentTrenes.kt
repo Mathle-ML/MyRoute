@@ -5,8 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.myroute.MainActivity
 import com.myroute.R
+import com.myroute.fragments.adapters.CustomAdapter
+import com.myroute.models.Ruta
 
 class FragmentTrenes : Fragment() {
     private var param1: String? = null
@@ -24,10 +28,18 @@ class FragmentTrenes : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val viewCont = inflater.inflate(R.layout.fragment_trenes, container, false)
+        val recyclerView = viewCont.findViewById<RecyclerView>(R.id.recyclerView)
+        val adapter = CustomAdapter(CustomAdapter.TRENES, Ruta.TYPE_TRAIN)
+
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = adapter
+
+        // Actualizar visibilidad de la barra de herramientas y la barra inferior
         MainActivity.toolbar.visibility = View.VISIBLE
         MainActivity.bottomBar.visibility = View.VISIBLE
 
-        return inflater.inflate(R.layout.fragment_trenes, container, false)
+        return viewCont
     }
 
     companion object {

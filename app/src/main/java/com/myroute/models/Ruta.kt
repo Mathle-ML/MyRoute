@@ -14,11 +14,9 @@ class Ruta(
     fun getIDRoute() : String{
         return idRoute
     }
-
     fun getRouteType() : String{
         return type
     }
-
     fun getRefPoints() : ArrayList<GeoPoint>{
         return refPointsArray
     }
@@ -32,7 +30,6 @@ class Ruta(
             "brown" -> Color.rgb(118, 34, 46)
             "pink" -> Color.rgb(214, 2, 128)
             "red" -> Color.rgb(195, 27, 16)
-            "zd" -> R.color.grey
             else -> 0
         }
     }

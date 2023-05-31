@@ -23,7 +23,11 @@ class CustomAdapter(whereAre: String,private val type: String): RecyclerView.Ada
     var whereAre = whereAre
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
-        val v = LayoutInflater.from(viewGroup.context).inflate(R.layout.recycle_view, viewGroup, false)
+        val v = if(type == Ruta.TYPE_BUS){
+            LayoutInflater.from(viewGroup.context).inflate(R.layout.recycle_view_camiones, viewGroup, false)
+        }else{
+            LayoutInflater.from(viewGroup.context).inflate(R.layout.recycle_view_train, viewGroup, false)
+        }
         return ViewHolder(v)
     }
 
@@ -32,6 +36,7 @@ class CustomAdapter(whereAre: String,private val type: String): RecyclerView.Ada
         viewHolder.itemTitle.text = str[0]
         viewHolder.itemText.text = "Destino: ${str[1]}"
         viewHolder.color.setBackgroundColor(rutas[i].getColor())
+        viewHolder.itemImage.setColorFilter(rutas[i].getColor())
         viewHolder.itemButton.setOnClickListener(){
             when(whereAre){
                 "camiones" -> {

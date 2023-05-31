@@ -27,7 +27,7 @@ class FragmentCamiones : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val viewCont = inflater.inflate(R.layout.fragment_camiones, container, false)
-        val recyclerView = viewCont.findViewById<RecyclerView>(R.id.recyclerViewCamiones)
+        val recyclerView = viewCont.findViewById<RecyclerView>(R.id.recyclerView)
         val adapter = CustomAdapter(CustomAdapter.CAMIONES, Ruta.TYPE_BUS)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
