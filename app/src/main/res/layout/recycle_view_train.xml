@@ -24,8 +24,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/bus"
-            android:tint="@color/brown" />
+            android:src="@drawable/train"/>
 
         <TextView
             android:id="@+id/title"

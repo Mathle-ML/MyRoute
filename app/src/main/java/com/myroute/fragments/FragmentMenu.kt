@@ -39,6 +39,7 @@ class FragmentMenu : Fragment() {
         val btnPrivacity = menuView.findViewById<Button>(R.id.btnPrivacity)
 
         btnPanel.setOnClickListener {
+            MainActivity.mainContext.checkTermsAndConditions()
             when{
                 MainActivity.isFragmentTrenes -> MainActivity.mainContext.findNavController(R.id.mainContainer)
                                                     .navigate(R.id.action_fragmentMenu_to_fragmentTrenes)

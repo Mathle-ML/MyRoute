@@ -36,7 +36,6 @@ class CustomAdapter(whereAre: String,private val type: String): RecyclerView.Ada
         viewHolder.itemTitle.text = str[0]
         viewHolder.itemText.text = "Destino: ${str[1]}"
         viewHolder.color.setBackgroundColor(rutas[i].getColor())
-        viewHolder.itemImage.setColorFilter(rutas[i].getColor())
         viewHolder.itemButton.setOnClickListener(){
             when(whereAre){
                 "camiones" -> {

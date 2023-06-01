@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -38,8 +40,14 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        checkTermsAndConditions()
+
         initializeViews()
         initializeEvents()
+    }
+
+    fun checkTermsAndConditions(){
+        if(!TermsManager.areTermsAccepted(this))showTermsDialog()
     }
 
     private fun initializeViews() {
@@ -156,6 +164,53 @@ class MainActivity : AppCompatActivity() {
         val warnDescView = dialog.findViewById<TextView>(R.id.warnDesc)
         warnCodeView.text = warnCode
         warnDescView.text = warnDesc
+    }
+
+    fun showTermsDialog(){
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.show_terms)
+        dialog.setCancelable(false)
+        dialog.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
+
+        val btnAceptar = dialog.findViewById<Button>(R.id.btnAceptar)
+        val btnCancelar = dialog.findViewById<Button>(R.id.btnCancelar)
+        val btnTextTerms = dialog.findViewById<TextView>(R.id.tvTerms)
+        val btnTexTPriv = dialog.findViewById<TextView>(R.id.tvPriv)
+
+        btnTextTerms.setOnClickListener{
+            dialog.cancel()
+            when {
+                isFragmentMap -> findNavController(R.id.mainContainer).navigate(R.id.action_fragmentMap_to_fragmentMenu)
+                isFragmentCamiones -> findNavController(R.id.mainContainer).navigate(R.id.action_fragmentCamiones_to_fragmentMenu)
+                isFragmentTrenes -> findNavController(R.id.mainContainer).navigate(R.id.action_fragmentTrenes_to_fragmentMenu)
+            }
+            findNavController(R.id.mainContainer).navigate(R.id.action_fragmentMenu_to_fragmentTerms)
+        }
+
+        btnTexTPriv.setOnClickListener{
+            dialog.cancel()
+            when {
+                isFragmentMap -> findNavController(R.id.mainContainer).navigate(R.id.action_fragmentMap_to_fragmentMenu)
+                isFragmentCamiones -> findNavController(R.id.mainContainer).navigate(R.id.action_fragmentCamiones_to_fragmentMenu)
+                isFragmentTrenes -> findNavController(R.id.mainContainer).navigate(R.id.action_fragmentTrenes_to_fragmentMenu)
+            }
+            findNavController(R.id.mainContainer).navigate(R.id.action_fragmentMenu_to_fragmentPrivacity)
+        }
+
+        btnAceptar.setOnClickListener{
+            TermsManager.setTermsAccepted(this)
+            dialog.cancel()
+        }
+        btnCancelar.setOnClickListener {
+            finish()
+        }
+
+        dialog.show()
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

@@ -115,7 +115,6 @@ class FragmentMap : Fragment() {
             nodeMarker.apply {
                 position = route.getRefStops()[i]
                 icon = nodeIcon
-                title = "Step $i"
             }
             mapView.overlays.add(nodeMarker)
         }
@@ -131,19 +130,25 @@ class FragmentMap : Fragment() {
     private fun generateTrainRoute(route: Ruta, mapView: MapView) {
         val polyline = Polyline().apply {
             route.getRefPoints().forEach { addPoint(it) }
-            color = Color.RED // Cambia "Color.RED" por el color deseado
+            color = route.getColor() // Cambia "Color.RED" por el color deseado
         }
+
+        mapView.overlayManager.add(polyline)
 
         for (i in route.getRefStops()) {
             val marker = Marker(mapView)
             marker.apply {
                 position = i
-                icon = resources.getDrawable(R.drawable.bus_stop) // Reemplaza "R.drawable.marker_icon" con tu propio recurso de icono
+                icon = resources.getDrawable(R.drawable.train_stop)
             }
             mapView.overlayManager.add(marker)
         }
 
-        mapView.overlayManager.add(polyline)
+        mapView.controller.apply {
+            setCenter(route.getRefPoints()[route.getRefPoints().size/2])
+            setZoom(14.0)
+        }
+
     }
 
     private fun addUserLocationMarker(mapView: MapView, location: GeoPoint) {
